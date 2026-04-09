@@ -6,8 +6,6 @@ export const IMG = {
     'https://images.unsplash.com/photo-1596755094514-f87a3407b206?auto=format&fit=crop&w=2000&q=85',
   banner2:
     'https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=2000&q=85',
-  featured:
-    'https://images.unsplash.com/photo-1570194065650-d99fb4b38b17?auto=format&fit=crop&w=1400&q=85',
 }
 
 export const PRODUCTS_A = [
@@ -77,44 +75,5 @@ export const PRODUCTS_B = [
     priceKo: '29,000원',
     priceEn: '₩29,000',
     img: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=80',
-  },
-]
-
-export const FEATURED_LIST = [
-  {
-    id: 'f1',
-    nameKo: '아쿠아 리페어 세트',
-    nameEn: 'Aqua Repair Set',
-    priceKo: '128,000원',
-    priceEn: '₩128,000',
-    thumb:
-      'https://images.unsplash.com/photo-1570194065650-d99fb4b38b17?auto=format&fit=crop&w=200&q=80',
-  },
-  {
-    id: 'f2',
-    nameKo: '미스트 토너 120ml',
-    nameEn: 'Mist Toner 120ml',
-    priceKo: '36,000원',
-    priceEn: '₩36,000',
-    thumb:
-      'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=200&q=80',
-  },
-  {
-    id: 'f3',
-    nameKo: '나이트 리페어 크림',
-    nameEn: 'Night Repair Cream',
-    priceKo: '48,000원',
-    priceEn: '₩48,000',
-    thumb:
-      'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=200&q=80',
-  },
-  {
-    id: 'f4',
-    nameKo: '에센스 듀오',
-    nameEn: 'Essence Duo',
-    priceKo: '89,000원',
-    priceEn: '₩89,000',
-    thumb:
-      'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=200&q=80',
   },
 ]

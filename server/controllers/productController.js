@@ -1,12 +1,20 @@
 const Product = require('../models/Product');
 
+function escapeRegex(str) {
+  return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // @desc    상품 목록 조회
-// @route   GET /api/products
+// @route   GET /api/products  (?skuPrefix=m-  SKU 접두사 필터)
 exports.getProducts = async (req, res, next) => {
   try {
-    const { category, search, sort, page = 1, limit = 12 } = req.query;
+    const { category, search, sort, page = 1, limit = 12, skuPrefix } = req.query;
     const query = {};
 
+    if (skuPrefix) {
+      const p = String(skuPrefix).trim();
+      if (p) query.sku = { $regex: new RegExp(`^${escapeRegex(p)}`, 'i') };
+    }
     if (category) query.category = category;
     if (search) query.name = { $regex: search, $options: 'i' };
 

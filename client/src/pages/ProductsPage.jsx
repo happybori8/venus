@@ -30,7 +30,7 @@ export default function ProductsPage() {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const params = { page, limit: 12, sort };
+        const params = { page, limit: 5, sort };
         if (category) params.category = category;
         if (search) params.search = search;
         const { data } = await getProductsAPI(params);

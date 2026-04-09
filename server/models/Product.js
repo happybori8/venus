@@ -48,9 +48,8 @@ const productSchema = new mongoose.Schema(
     images: [{ type: String }],
     stock: {
       type: Number,
-      required: true,
-      default: 0,
-      min: 0,
+      default: null,
+      required: false,
     },
     reviews: [reviewSchema],
     rating: {

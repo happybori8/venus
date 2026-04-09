@@ -179,6 +179,41 @@
   overflow-x: auto;
 }
 
+.admin-pagination {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.admin-page-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.5rem;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.admin-page-btn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.admin-page-btn.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
 .admin-table {
   width: 100%;
   border-collapse: collapse;
@@ -200,6 +235,33 @@
 
 .admin-table tr:hover td {
   background: #fafafa;
+}
+
+.admin-table-detail-link {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.admin-table-detail-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.admin-table-thumb-link {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+
+.admin-table-thumb-link:hover {
+  opacity: 0.92;
+  box-shadow: 0 0 0 2px #2563eb;
+}
+
+.admin-table-name-link {
+  font-weight: 600;
 }
 
 .admin-table-td-thumb {
@@ -264,28 +326,24 @@
   border-radius: 8px;
 }
 
+/* 가격·재고: number 필드의 위/아래 스피너(증감 버튼) 숨김 — 직접 입력만 */
+.admin-form-grid input[type='number'] {
+  -moz-appearance: textfield;
+}
+.admin-form-grid input[type='number']::-webkit-outer-spin-button,
+.admin-form-grid input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .admin-muted {
   color: #6b7280;
   font-size: 0.8125rem;
 }
 
-/* 상품 관리 — Cloudinary 선택 영역 */
+/* 상품 관리 — Cloudinary 업로드 버튼 */
 .admin-cloudinary-option {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
   margin-top: 0.65rem;
-  padding: 0.6rem 0.75rem;
-  background: #f9fafb;
-  border-radius: 8px;
-  border: 1px dashed #d1d5db;
-}
-
-.admin-cloudinary-option .admin-muted {
-  flex: 1 1 180px;
-  min-width: 0;
-  font-size: 0.78rem;
 }
 
 /* 상품 관리 — 이미지 미리보기 */

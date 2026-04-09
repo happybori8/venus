@@ -84,8 +84,8 @@ export default function CloudinaryUploadButton({ onUploaded, disabled }) {
   }, [onUploaded])
 
   return (
-    <button type="button" className="admin-btn admin-btn-ghost" onClick={handleClick} disabled={disabled || busy}>
-      {busy ? '준비 중…' : 'Cloudinary에 업로드 (선택)'}
+    <button type="button" className="admin-btn admin-btn-primary" onClick={handleClick} disabled={disabled || busy}>
+      {busy ? '준비 중…' : 'Cloudinary로 이미지 업로드'}
     </button>
   )
 }

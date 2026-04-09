@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { adminGetProducts, adminCreateProduct, adminUpdateProduct, adminDeleteProduct } from '../../api/adminApi'
 import CloudinaryUploadButton from '../../components/admin/CloudinaryUploadButton'
 import './Admin.css'
@@ -27,9 +28,16 @@ const emptyForm = {
   category: '마스크팩',
   name: '',
   price: '',
-  stock: '0',
+  stock: null,
   description: '',
   images: '',
+}
+
+function parseStockField(v) {
+  if (v === '' || v == null) return null
+  const n = Number(v)
+  if (!Number.isFinite(n) || n < 0) return null
+  return Math.floor(n)
 }
 
 const parseImages = (s) =>
@@ -46,18 +54,6 @@ function truncateDescription(text, max = 20) {
   return `${t.slice(0, max)}…`
 }
 
-/** Cloudinary 위젯: 비서명은 cloud name+프리셋, 서명은 cloud name+API키(+서버 SECRET) */
-function isCloudinaryWidgetConfigured() {
-  const cn = String(import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '').trim()
-  if (!cn) return false
-  const useSigned = String(import.meta.env.VITE_CLOUDINARY_USE_SIGNED || '').toLowerCase() === 'true'
-  const apiKey = String(import.meta.env.VITE_CLOUDINARY_API_KEY || '').trim()
-  const preset = String(import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || '').trim()
-  if (useSigned && apiKey) return true
-  if (!useSigned && preset) return true
-  return false
-}
-
 function apiErrorMessage(err) {
   if (!err?.response) {
     return '서버에 연결할 수 없습니다. 백엔드(node server.js, 포트 5000)가 실행 중인지, VITE_API_URL=/api 인지 확인하세요.'
@@ -67,9 +63,14 @@ function apiErrorMessage(err) {
   return m || '요청 실패'
 }
 
+const LIST_PAGE_SIZE = 3
+
 export default function AdminProducts() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [listPage, setListPage] = useState(1)
+  const [listTotal, setListTotal] = useState(0)
+  const [listTotalPages, setListTotalPages] = useState(1)
   const [msg, setMsg] = useState({ type: '', text: '' })
   const [form, setForm] = useState(emptyForm)
   const [editingId, setEditingId] = useState(null)
@@ -77,14 +78,27 @@ export default function AdminProducts() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const { data } = await adminGetProducts({ limit: 200 })
+      const { data } = await adminGetProducts({ page: listPage, limit: LIST_PAGE_SIZE })
+      const totalCount = data.total ?? 0
+      const serverPages =
+        typeof data.pages === 'number' && data.pages > 0
+          ? data.pages
+          : Math.max(1, totalCount === 0 ? 1 : Math.ceil(totalCount / LIST_PAGE_SIZE))
+
+      if (listPage > serverPages) {
+        setListPage(serverPages)
+        return
+      }
+
       setProducts(data.products || [])
+      setListTotal(totalCount)
+      setListTotalPages(serverPages)
     } catch (e) {
       setMsg({ type: 'error', text: apiErrorMessage(e) })
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [listPage])
 
   useEffect(() => {
     load()
@@ -106,7 +120,7 @@ export default function AdminProducts() {
       category: form.category,
       name: form.name.trim(),
       price: Number(form.price),
-      stock: Number(form.stock) || 0,
+      stock: parseStockField(form.stock),
       description: form.description.trim(),
       images: parseImages(form.images),
     }
@@ -126,6 +140,11 @@ export default function AdminProducts() {
     }
   }
 
+  const handleListPageChange = (p) => {
+    setListPage(p)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   const startEdit = (p) => {
     setEditingId(p._id)
     const cat = CATEGORIES.includes(p.category) ? p.category : CATEGORIES[0]
@@ -134,7 +153,7 @@ export default function AdminProducts() {
       category: cat,
       name: p.name,
       price: String(p.price),
-      stock: String(p.stock ?? 0),
+      stock: p.stock != null ? String(p.stock) : null,
       description: p.description || '',
       images: (p.images || []).join(', '),
     })
@@ -200,13 +219,21 @@ export default function AdminProducts() {
             </label>
             <label>
               재고
-              <input type="number" min="0" value={form.stock} onChange={(e) => setForm((f) => ({ ...f, stock: e.target.value }))} />
+              <input
+                type="number"
+                min="0"
+                value={form.stock == null ? '' : form.stock}
+                onChange={(e) => {
+                  const v = e.target.value
+                  setForm((f) => ({ ...f, stock: v === '' ? null : v }))
+                }}
+              />
             </label>
           </div>
           <label style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginBottom: '0.75rem', fontSize: '0.8125rem' }}>
-            상품 이미지 URL (선택)
+            상품 이미지 (URL 직접 입력 또는 Cloudinary 업로드)
             <span className="admin-muted" style={{ fontWeight: 400, display: 'block', marginTop: '0.15rem' }}>
-              <strong style={{ fontWeight: 600, color: '#374151' }}>일반 이미지 주소만 넣으면 됩니다.</strong> https:// 로 시작하는 주소를 입력하고 「상품등록」하세요. 여러 장은 쉼표(,)로 구분합니다. Cloudinary는 필수가 아닙니다.
+              <strong style={{ fontWeight: 600, color: '#374151' }}>이미지 주소</strong>를 직접 넣거나, 아래에서 Cloudinary에 올리면 업로드된 주소가 자동으로 붙습니다. 여러 장은 쉼표(,)로 구분합니다.
             </span>
             <input
               style={{ width: '100%', marginTop: '0.35rem' }}
@@ -214,12 +241,9 @@ export default function AdminProducts() {
               onChange={(e) => setForm((f) => ({ ...f, images: e.target.value }))}
               placeholder="예: https://example.com/product.jpg"
             />
-            {isCloudinaryWidgetConfigured() ? (
-              <div className="admin-cloudinary-option">
-                <span className="admin-muted">선택 — 내 Cloudinary에 올려서 URL을 자동으로 붙이려면:</span>
-                <CloudinaryUploadButton onUploaded={appendImageUrl} />
-              </div>
-            ) : null}
+            <div className="admin-cloudinary-option">
+              <CloudinaryUploadButton onUploaded={appendImageUrl} />
+            </div>
             {parseImages(form.images).length > 0 && (
               <div className="admin-image-preview-grid" aria-label="이미지 미리보기">
                 {parseImages(form.images).map((url) => (
@@ -247,6 +271,11 @@ export default function AdminProducts() {
 
       <div className="admin-card admin-table-wrap">
         <h2 style={{ fontSize: '1rem', marginBottom: '1rem' }}>상품 목록</h2>
+        {!loading && (
+          <p className="admin-muted" style={{ marginBottom: '0.75rem' }}>
+            전체 {listTotal}개 · 페이지당 {LIST_PAGE_SIZE}개
+          </p>
+        )}
         {loading ? (
           <p className="admin-muted">불러오는 중…</p>
         ) : (
@@ -266,26 +295,40 @@ export default function AdminProducts() {
             <tbody>
               {products.map((p) => (
                 <tr key={p._id}>
-                  <td>{p.sku ?? '—'}</td>
+                  <td>
+                    <Link to={`/products/${p._id}`} className="admin-table-detail-link">
+                      {p.sku ?? '—'}
+                    </Link>
+                  </td>
                   <td className="admin-table-td-thumb">
-                    {p.images?.[0] ? (
-                      <img
-                        src={p.images[0]}
-                        alt=""
-                        className="admin-table-list-thumb"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <span className="admin-muted">—</span>
-                    )}
+                    <Link
+                      to={`/products/${p._id}`}
+                      className="admin-table-thumb-link"
+                      aria-label={`${p.name} 상세 페이지`}
+                    >
+                      {p.images?.[0] ? (
+                        <img
+                          src={p.images[0]}
+                          alt=""
+                          className="admin-table-list-thumb"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <span className="admin-muted">—</span>
+                      )}
+                    </Link>
                   </td>
                   <td>{p.category}</td>
-                  <td>{p.name}</td>
+                  <td>
+                    <Link to={`/products/${p._id}`} className="admin-table-detail-link admin-table-name-link">
+                      {p.name}
+                    </Link>
+                  </td>
                   <td className="admin-table-td-desc" title={p.description || ''}>
                     {truncateDescription(p.description, 20)}
                   </td>
                   <td>{p.price?.toLocaleString()}원</td>
-                  <td>{p.stock}</td>
+                  <td>{p.stock != null ? p.stock : '—'}</td>
                   <td>
                     <button type="button" className="admin-btn admin-btn-ghost" style={{ marginRight: '0.35rem' }} onClick={() => startEdit(p)}>
                       수정
@@ -298,6 +341,20 @@ export default function AdminProducts() {
               ))}
             </tbody>
           </table>
+        )}
+        {!loading && listTotalPages > 1 && (
+          <div className="admin-pagination" role="navigation" aria-label="상품 목록 페이지">
+            {Array.from({ length: listTotalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                type="button"
+                className={`admin-page-btn ${p === listPage ? 'active' : ''}`}
+                onClick={() => handleListPageChange(p)}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
         )}
       </div>
     </>

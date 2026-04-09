@@ -19,6 +19,7 @@ export default function ProductCard({ product }) {
       : 0;
 
   const displayPrice = product.discountPrice > 0 ? product.discountPrice : product.price;
+  const isOutOfStock = product.stock != null && product.stock <= 0;
 
   return (
     <Link to={`/products/${product._id}`} className="product-card">
@@ -28,7 +29,7 @@ export default function ProductCard({ product }) {
           alt={product.name}
         />
         {discountRate > 0 && <span className="discount-badge">-{discountRate}%</span>}
-        {product.stock === 0 && <div className="out-of-stock-overlay">품절</div>}
+        {isOutOfStock && <div className="out-of-stock-overlay">품절</div>}
       </div>
       <div className="product-info">
         <span className="product-category">{product.category}</span>
@@ -45,7 +46,7 @@ export default function ProductCard({ product }) {
             )}
             <span className="final-price">{displayPrice.toLocaleString()}원</span>
           </div>
-          <button className="add-cart-btn" onClick={handleAddToCart} disabled={product.stock === 0}>
+          <button className="add-cart-btn" onClick={handleAddToCart} disabled={isOutOfStock}>
             <FiShoppingCart />
           </button>
         </div>

@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import useAuthStore from '../store/authStore'
 import { getStoredUser } from '../utils/authStorage'
-import { IMG, PRODUCTS_A, PRODUCTS_B } from '../data/landingContent'
+import { IMG } from '../data/landingContent'
 import LandingNavbar from '../components/landing/LandingNavbar'
 import LandingHero from '../components/landing/LandingHero'
-import LandingProductGrid from '../components/landing/LandingProductGrid'
+import LandingMaskPackGrid from '../components/landing/LandingMaskPackGrid'
+import LandingCleanserGrid from '../components/landing/LandingCleanserGrid'
 import LandingFullBanner from '../components/landing/LandingFullBanner'
-import LandingFeatured from '../components/landing/LandingFeatured'
 import LandingFooter from '../components/landing/LandingFooter'
 import './HomePage.css'
 
@@ -38,10 +38,9 @@ export default function HomePage() {
 
       <main>
         <LandingHero />
-        <LandingProductGrid sectionTitleKey="section_new" products={PRODUCTS_A} />
+        <LandingMaskPackGrid />
         <LandingFullBanner src={IMG.banner1} />
-        <LandingProductGrid sectionTitleKey="section_best" products={PRODUCTS_B} />
-        <LandingFeatured />
+        <LandingCleanserGrid />
         <LandingFullBanner src={IMG.banner2} tall />
       </main>
 
