@@ -1,0 +1,37 @@
+.product-card {
+  display: flex; flex-direction: column; background: var(--white);
+  border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.product-img-wrap { position: relative; aspect-ratio: 1; overflow: hidden; background: var(--gray-100); }
+.product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.product-card:hover .product-img-wrap img { transform: scale(1.05); }
+.discount-badge {
+  position: absolute; top: 10px; left: 10px; background: var(--danger); color: white;
+  font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: var(--radius-sm);
+}
+.out-of-stock-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.45); color: white;
+  display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700;
+}
+.product-info { padding: 0.9rem; display: flex; flex-direction: column; gap: 0.35rem; flex: 1; }
+.product-category { font-size: 0.75rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.03em; }
+.product-name {
+  font-size: 0.95rem; font-weight: 600; color: var(--gray-800); line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.product-rating { display: flex; align-items: center; gap: 0.25rem; font-size: 0.85rem; color: var(--gray-600); }
+.star-icon { color: var(--secondary); fill: var(--secondary); }
+.review-count { color: var(--gray-400); }
+.product-price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 0.25rem; }
+.product-price { display: flex; flex-direction: column; }
+.original-price { font-size: 0.78rem; color: var(--gray-400); text-decoration: line-through; }
+.final-price { font-size: 1.05rem; font-weight: 700; color: var(--gray-900); }
+.add-cart-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; background: var(--primary); color: white;
+  border-radius: var(--radius-sm); font-size: 1rem; transition: background var(--transition); flex-shrink: 0;
+}
+.add-cart-btn:hover:not(:disabled) { background: var(--primary-dark); }
+.add-cart-btn:disabled { background: var(--gray-300); cursor: not-allowed; }

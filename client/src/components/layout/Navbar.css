@@ -1,0 +1,38 @@
+.navbar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--white); border-bottom: 1px solid var(--gray-200); box-shadow: var(--shadow-sm);
+}
+.navbar-inner {
+  display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 1rem;
+}
+.navbar-logo { font-size: 1.4rem; font-weight: 800; color: var(--primary); white-space: nowrap; }
+.navbar-links { display: flex; align-items: center; gap: 1.5rem; }
+.navbar-links a { font-size: 0.95rem; font-weight: 500; color: var(--gray-600); transition: color var(--transition); }
+.navbar-links a:hover { color: var(--primary); }
+.navbar-logout {
+  display: flex; align-items: center; gap: 0.3rem; background: none;
+  font-size: 0.95rem; font-weight: 500; color: var(--gray-600); transition: color var(--transition); padding: 0;
+}
+.navbar-logout:hover { color: var(--danger); }
+.navbar-actions { display: flex; align-items: center; gap: 0.75rem; }
+.cart-btn, .profile-btn {
+  position: relative; display: flex; align-items: center;
+  color: var(--gray-600); transition: color var(--transition);
+}
+.cart-btn:hover, .profile-btn:hover { color: var(--primary); }
+.cart-badge {
+  position: absolute; top: -8px; right: -8px;
+  background: var(--danger); color: var(--white); font-size: 0.7rem; font-weight: 700;
+  width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+.menu-toggle { display: none; background: none; color: var(--gray-700); padding: 0.25rem; }
+
+@media (max-width: 768px) {
+  .menu-toggle { display: flex; }
+  .navbar-links {
+    display: none; position: absolute; top: 64px; left: 0; right: 0;
+    background: var(--white); flex-direction: column; padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--gray-200); gap: 1.25rem; box-shadow: var(--shadow-md);
+  }
+  .navbar-links.open { display: flex; }
+}

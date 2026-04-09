@@ -1,0 +1,161 @@
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  padding: 2rem 1rem;
+}
+
+.register-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.register-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  color: #111827;
+  margin-bottom: 1.8rem;
+}
+
+/* 섹션 구분 라벨 */
+.section-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.4rem;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.section-label:first-of-type {
+  margin-top: 0;
+}
+
+.optional {
+  font-weight: 400;
+  color: #9ca3af;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* 폼 그룹 */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.required {
+  color: #ef4444;
+}
+
+.form-group input {
+  padding: 0.65rem 0.9rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #2563eb;
+}
+
+/* 두 칸 행 */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* 에러 메시지 */
+.error {
+  font-size: 0.78rem;
+  color: #ef4444;
+}
+
+/* 서버/성공 메시지 */
+.msg-success {
+  background: #dcfce7;
+  color: #15803d;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.msg-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+/* 제출 버튼 */
+.btn-submit {
+  width: 100%;
+  padding: 0.85rem;
+  background-color: #2563eb;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  margin-top: 1.25rem;
+  transition: background-color 0.2s;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #1d4ed8;
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 뒤로가기 */
+.back-link {
+  text-align: center;
+  margin-top: 1.25rem;
+}
+
+.back-link button {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.back-link button:hover {
+  color: #2563eb;
+}
+
+@media (max-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

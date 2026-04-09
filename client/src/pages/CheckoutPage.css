@@ -1,0 +1,29 @@
+.checkout-page { padding: 2rem 0 4rem; }
+.checkout-layout { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start; }
+.checkout-section { padding: 1.5rem; margin-bottom: 1.25rem; }
+.checkout-section h3 { font-size: 1rem; font-weight: 700; color: var(--gray-800); margin-bottom: 1.25rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--gray-200); }
+.checkout-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-full { grid-column: 1 / -1; }
+.payment-options { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.payment-option { display: flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.1rem; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 0.9rem; cursor: pointer; transition: all var(--transition); }
+.payment-option input { display: none; }
+.payment-option.active { border-color: var(--primary); color: var(--primary); background: #eff6ff; font-weight: 600; }
+.place-order-btn { width: 100%; padding: 0.9rem; font-size: 1rem; font-weight: 700; }
+.checkout-summary { padding: 1.5rem; position: sticky; top: 80px; }
+.checkout-summary h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--gray-200); }
+.checkout-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid var(--gray-100); }
+.checkout-item img { width: 48px; height: 48px; border-radius: var(--radius-sm); object-fit: cover; }
+.checkout-item-info { flex: 1; }
+.checkout-item-info p { font-size: 0.875rem; font-weight: 500; color: var(--gray-700); margin-bottom: 0.2rem; }
+.checkout-item-info span { font-size: 0.8rem; color: var(--gray-400); }
+.checkout-item > span:last-child { font-size: 0.9rem; font-weight: 600; white-space: nowrap; }
+.checkout-totals { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.checkout-row { display: flex; justify-content: space-between; font-size: 0.875rem; color: var(--gray-600); }
+.checkout-total { display: flex; justify-content: space-between; font-size: 1rem; font-weight: 700; color: var(--gray-900); padding-top: 0.75rem; border-top: 1px solid var(--gray-200); margin-top: 0.25rem; }
+
+@media (max-width: 768px) {
+  .checkout-layout { grid-template-columns: 1fr; }
+  .checkout-summary { position: static; }
+  .checkout-fields { grid-template-columns: 1fr; }
+  .form-full { grid-column: 1; }
+}

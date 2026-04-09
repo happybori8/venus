@@ -1,0 +1,24 @@
+.products-page { padding: 2rem 0 4rem; }
+.products-layout { display: grid; grid-template-columns: 220px 1fr; gap: 2rem; align-items: start; }
+.products-sidebar { background: var(--white); border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow); position: sticky; top: 80px; }
+.filter-section h3 { font-size: 0.9rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+.filter-btn { display: block; width: 100%; text-align: left; padding: 0.5rem 0.6rem; background: none; font-size: 0.9rem; color: var(--gray-600); border-radius: var(--radius-sm); transition: all var(--transition); }
+.filter-btn:hover { background: var(--gray-100); color: var(--gray-900); }
+.filter-btn.active { background: #dbeafe; color: var(--primary); font-weight: 600; }
+.products-toolbar { display: flex; gap: 0.75rem; margin-bottom: 1rem; align-items: center; }
+.search-form { display: flex; flex: 1; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); overflow: hidden; background: var(--white); }
+.search-form input { flex: 1; border: none; padding: 0.6rem 0.9rem; font-size: 0.9rem; outline: none; }
+.search-form button { padding: 0.6rem 1rem; background: var(--primary); color: white; font-size: 1rem; display: flex; align-items: center; }
+.sort-select { padding: 0.6rem 0.75rem; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-size: 0.9rem; background: var(--white); cursor: pointer; outline: none; }
+.result-count { font-size: 0.875rem; color: var(--gray-500); margin-bottom: 1.25rem; }
+.pagination { display: flex; justify-content: center; gap: 0.4rem; margin-top: 2.5rem; }
+.page-btn { width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--white); border: 1.5px solid var(--gray-200); color: var(--gray-600); font-size: 0.9rem; font-weight: 500; transition: all var(--transition); }
+.page-btn:hover { border-color: var(--primary); color: var(--primary); }
+.page-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+@media (max-width: 768px) {
+  .products-layout { grid-template-columns: 1fr; }
+  .products-sidebar { position: static; }
+  .filter-btn { display: inline-block; width: auto; margin: 0.2rem; border: 1.5px solid var(--gray-200); }
+  .filter-btn.active { border-color: var(--primary); }
+}

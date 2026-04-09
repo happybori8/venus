@@ -1,0 +1,45 @@
+.product-detail-page { padding: 2rem 0 4rem; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
+.main-image { border-radius: var(--radius); overflow: hidden; aspect-ratio: 1; background: var(--gray-100); }
+.main-image img { width: 100%; height: 100%; object-fit: cover; }
+.image-thumbnails { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+.image-thumbnails img { width: 70px; height: 70px; border-radius: var(--radius-sm); object-fit: cover; cursor: pointer; border: 2px solid transparent; transition: border-color var(--transition); }
+.image-thumbnails img.active, .image-thumbnails img:hover { border-color: var(--primary); }
+.detail-category { font-size: 0.8rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; }
+.detail-sku { display: block; font-size: 0.8rem; color: var(--gray-500); margin-top: 0.35rem; letter-spacing: 0.02em; }
+.detail-name { font-size: 1.6rem; font-weight: 700; color: var(--gray-900); margin: 0.5rem 0; line-height: 1.35; }
+.detail-rating { display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; color: var(--gray-600); margin-bottom: 1rem; }
+.star-icon { color: var(--secondary); fill: var(--secondary); }
+.detail-price { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 1.25rem; }
+.original-price { font-size: 1rem; color: var(--gray-400); text-decoration: line-through; }
+.final-price { font-size: 2rem; font-weight: 800; color: var(--gray-900); }
+.detail-description { color: var(--gray-600); line-height: 1.7; margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--gray-200); }
+.stock-info { margin-bottom: 1rem; }
+.in-stock { color: var(--success); font-weight: 600; font-size: 0.9rem; }
+.out-stock { color: var(--danger); font-weight: 600; font-size: 0.9rem; }
+.qty-selector { display: flex; align-items: center; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); overflow: hidden; width: fit-content; margin-bottom: 1rem; }
+.qty-selector button { padding: 0.5rem 0.9rem; background: var(--gray-100); font-size: 1rem; color: var(--gray-600); transition: background var(--transition); }
+.qty-selector button:hover { background: var(--gray-200); }
+.qty-selector span { padding: 0.5rem 1.25rem; font-weight: 600; min-width: 50px; text-align: center; }
+.detail-actions { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; }
+.detail-actions .btn { flex: 1; padding: 0.85rem; font-size: 1rem; }
+.shipping-info { background: var(--gray-50); padding: 0.9rem 1rem; border-radius: var(--radius-sm); display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.875rem; color: var(--gray-600); }
+.reviews-section { border-top: 2px solid var(--gray-200); padding-top: 2.5rem; }
+.reviews-section h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; }
+.review-form { background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.star-rating { display: flex; gap: 0.3rem; }
+.star { font-size: 1.5rem; cursor: pointer; color: var(--gray-300); transition: color var(--transition); }
+.star.active { color: var(--secondary); fill: var(--secondary); }
+.review-form textarea { border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); padding: 0.65rem 0.9rem; resize: vertical; font-size: 0.9rem; outline: none; font-family: inherit; }
+.review-form textarea:focus { border-color: var(--primary); }
+.review-form .btn { align-self: flex-end; }
+.reviews-list { display: flex; flex-direction: column; gap: 1rem; }
+.review-item { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 1.1rem; }
+.review-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+.review-header strong { font-weight: 600; }
+.review-stars { display: flex; gap: 0.15rem; }
+.review-stars .star { font-size: 0.9rem; cursor: default; }
+.review-date { font-size: 0.8rem; color: var(--gray-400); margin-left: auto; }
+.no-reviews { color: var(--gray-500); text-align: center; padding: 2rem; }
+
+@media (max-width: 768px) { .detail-grid { grid-template-columns: 1fr; gap: 2rem; } .final-price { font-size: 1.6rem; } }
