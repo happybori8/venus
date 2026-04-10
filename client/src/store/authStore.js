@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { loginAPI, registerAPI, getMeAPI } from '../api/auth';
+import useCartStore from './cartStore';
 
 const useAuthStore = create((set) => ({
   user: null,
@@ -35,8 +36,10 @@ const useAuthStore = create((set) => ({
   },
 
   logout: () => {
+    useCartStore.getState().beforeLogoutPersist();
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    useCartStore.getState().loadGuestCart();
     set({ user: null, token: null, isAuthenticated: false });
   },
 }));

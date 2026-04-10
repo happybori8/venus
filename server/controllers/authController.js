@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  const sid = id != null ? String(id) : id;
+  return jwt.sign({ id: sid }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
 };

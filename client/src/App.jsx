@@ -14,10 +14,12 @@ import ProductsPage from './pages/ProductsPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import BrandPage from './pages/BrandPage'
 import SupportPage from './pages/SupportPage'
+import CartBootstrap from './components/CartBootstrap'
 
 function App() {
   return (
     <>
+      <CartBootstrap />
       <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
       <BrowserRouter>
         <Routes>

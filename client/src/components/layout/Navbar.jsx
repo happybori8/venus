@@ -44,7 +44,7 @@ export default function Navbar() {
         <div className="navbar-actions">
           <Link to="/cart" className="cart-btn">
             <FiShoppingCart size={22} />
-            {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+            {isAuthenticated && totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
           </Link>
           {isAuthenticated && (
             <Link to="/profile" className="profile-btn"><FiUser size={22} /></Link>

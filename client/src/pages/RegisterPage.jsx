@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { registerAPI } from '../api/auth'
+import useCartStore from '../store/cartStore'
 import './RegisterPage.css'
 
 const INITIAL_FORM = {
@@ -74,9 +75,9 @@ export default function RegisterPage() {
       const { confirmPassword, ...submitData } = form
       const { data } = await registerAPI(submitData)
 
-      // 서버 응답에서 토큰과 유저 정보 저장
       localStorage.setItem('token', data.token)
       localStorage.setItem('user', JSON.stringify(data.user))
+      useCartStore.getState().hydrateCartAfterAuth()
 
       setSuccessMsg(`${data.user.name}님, 회원가입이 완료되었습니다! 메인 페이지로 이동합니다.`)
       setTimeout(() => navigate('/'), 2000)

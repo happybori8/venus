@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { loginAPI } from '../api/auth'
+import useCartStore from '../store/cartStore'
 import './LoginPage.css'
 
 const INITIAL_FORM = {
@@ -74,6 +75,7 @@ export default function LoginPage() {
 
       localStorage.setItem('token', data.token)
       localStorage.setItem('user', JSON.stringify(data.user))
+      useCartStore.getState().hydrateCartAfterAuth()
 
       navigate('/')
     } catch (err) {

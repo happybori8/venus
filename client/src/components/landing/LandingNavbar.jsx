@@ -55,7 +55,7 @@ export default function LandingNavbar({ user, isLoggedIn, isAdmin, onLogout }) {
             className="landing-cart-btn"
             onClick={() => navigate('/cart')}
             aria-label={
-              cartKindCount > 0
+              isLoggedIn && cartKindCount > 0
                 ? t('cart_aria_with_count', { count: cartKindCount })
                 : t('cart')
             }
@@ -63,7 +63,7 @@ export default function LandingNavbar({ user, isLoggedIn, isAdmin, onLogout }) {
             <span className="landing-cart-btn-inner">
               <FiShoppingCart className="landing-cart-icon" aria-hidden />
               <span className="landing-cart-label">{t('cart')}</span>
-              {cartKindCount > 0 ? (
+              {isLoggedIn && cartKindCount > 0 ? (
                 <span className="landing-cart-badge" aria-hidden>
                   {cartKindCount > 99 ? '99+' : cartKindCount}
                 </span>
