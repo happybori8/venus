@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLanguage } from '../../context/LanguageContext'
+import { t } from '../../i18n/t'
 import { getProductsAPI } from '../../api/products'
 import LandingProductCard from './LandingProductCard'
 
@@ -15,7 +15,6 @@ function pickMaskPackProducts(products) {
 
 /** 이미지 클릭 시 상세로 이동 */
 export default function LandingMaskPackGrid() {
-  const { lang, t } = useLanguage()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -42,13 +41,11 @@ export default function LandingMaskPackGrid() {
   }, [])
 
   const mapped = products.map((p) => ({
+    ...p,
     id: p._id,
     detailId: p._id,
     img: p.images?.[0] || 'https://placehold.co/600?text=No+Image',
-    nameKo: p.name,
-    nameEn: p.name,
-    priceKo: `${Number(p.price ?? 0).toLocaleString()}원`,
-    priceEn: `₩${Number(p.price ?? 0).toLocaleString()}`,
+    priceKo: `${Number(p.price ?? 0).toLocaleString('ko-KR')}원`,
   }))
 
   return (
@@ -56,15 +53,13 @@ export default function LandingMaskPackGrid() {
       <div className="landing-section-inner">
         <h2 className="landing-section-title">{t('section_new')}</h2>
         {loading ? (
-          <p className="landing-maskpack-loading">불러오는 중…</p>
+          <p className="landing-maskpack-loading">{t('landing_loading')}</p>
         ) : mapped.length === 0 ? (
-          <p className="landing-maskpack-empty">
-            등록된 마스크팩 상품이 없습니다. (SKU m-1, m-2, m-3 상품을 등록해 주세요)
-          </p>
+          <p className="landing-maskpack-empty">{t('landing_maskpack_empty')}</p>
         ) : (
           <div className="landing-product-grid">
             {mapped.map((p) => (
-              <LandingProductCard key={p.id} product={p} lang={lang} detailId={p.detailId} />
+              <LandingProductCard key={p.id} product={p} detailId={p.detailId} />
             ))}
           </div>
         )}

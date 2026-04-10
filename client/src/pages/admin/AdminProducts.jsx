@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { adminGetProducts, adminCreateProduct, adminUpdateProduct, adminDeleteProduct } from '../../api/adminApi'
 import CloudinaryUploadButton from '../../components/admin/CloudinaryUploadButton'
 import './Admin.css'
+import { PRODUCT_CATEGORIES } from '../../constants/productCategories'
 
 function AdminImagePreviewThumb({ url }) {
   const [failed, setFailed] = useState(false)
@@ -21,11 +22,9 @@ function AdminImagePreviewThumb({ url }) {
   )
 }
 
-const CATEGORIES = ['마스크팩', '클렌저']
-
 const emptyForm = {
   sku: '',
-  category: '마스크팩',
+  category: PRODUCT_CATEGORIES[0],
   name: '',
   price: '',
   stock: null,
@@ -147,7 +146,7 @@ export default function AdminProducts() {
 
   const startEdit = (p) => {
     setEditingId(p._id)
-    const cat = CATEGORIES.includes(p.category) ? p.category : CATEGORIES[0]
+    const cat = PRODUCT_CATEGORIES.includes(p.category) ? p.category : PRODUCT_CATEGORIES[0]
     setForm({
       sku: p.sku ?? '',
       category: cat,
@@ -202,7 +201,7 @@ export default function AdminProducts() {
             <label>
               카테고리
               <select value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}>
-                {CATEGORIES.map((c) => (
+                {PRODUCT_CATEGORIES.map((c) => (
                   <option key={c} value={c}>
                     {c}
                   </option>
@@ -252,7 +251,7 @@ export default function AdminProducts() {
               </div>
             )}
           </label>
-          <label style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginBottom: '1rem', fontSize: '0.8125rem' }}>
+          <label style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginBottom: '0.75rem', fontSize: '0.8125rem' }}>
             설명 (선택)
             <textarea rows={3} value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} placeholder="비워두어도 됩니다" />
           </label>

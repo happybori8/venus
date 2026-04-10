@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
-import { LanguageProvider } from './context/LanguageContext'
 import HomePage from './pages/HomePage'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
@@ -13,16 +12,20 @@ import AdminProducts from './pages/admin/AdminProducts'
 import AdminOrders from './pages/admin/AdminOrders'
 import ProductsPage from './pages/ProductsPage'
 import ProductDetailPage from './pages/ProductDetailPage'
+import BrandPage from './pages/BrandPage'
+import SupportPage from './pages/SupportPage'
 
 function App() {
   return (
-    <LanguageProvider>
+    <>
       <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
+          <Route path="/brand" element={<BrandPage />} />
+          <Route path="/support" element={<SupportPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/cart" element={<CartPage />} />
@@ -35,7 +38,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </LanguageProvider>
+    </>
   )
 }
 

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { PRODUCT_CATEGORIES } from '../../constants/productCategories';
 import './Footer.css';
 
 export default function Footer() {
@@ -12,14 +13,17 @@ export default function Footer() {
         <div className="footer-links">
           <h4>쇼핑</h4>
           <Link to="/products">전체 상품</Link>
-          <Link to="/products?category=마스크팩">마스크팩</Link>
-          <Link to="/products?category=클렌저">클렌저</Link>
+          {PRODUCT_CATEGORIES.map((c) => (
+            <Link key={c} to={`/products?category=${encodeURIComponent(c)}`}>
+              {c}
+            </Link>
+          ))}
         </div>
         <div className="footer-links">
           <h4>고객 서비스</h4>
           <Link to="/orders">주문 내역</Link>
           <Link to="/profile">내 정보</Link>
-          <Link to="/cart">장바구니</Link>
+          <Link to="/cart">카트</Link>
         </div>
         <div className="footer-links">
           <h4>계정</h4>

@@ -24,6 +24,11 @@ const useCartStore = create(
         set({ items: get().items.filter((i) => i._id !== id) });
       },
 
+      removeItemsByIds: (ids) => {
+        const setIds = new Set(ids);
+        set({ items: get().items.filter((i) => !setIds.has(i._id)) });
+      },
+
       updateQuantity: (id, quantity) => {
         if (quantity < 1) return;
         set({

@@ -1,7 +1,6 @@
-import { useLanguage } from '../../context/LanguageContext'
+import { t } from '../../i18n/t'
 
 export default function LandingFooter() {
-  const { t } = useLanguage()
 
   return (
     <footer className="landing-footer">

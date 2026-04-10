@@ -1,0 +1,271 @@
+/* 브랜드 페이지 — Venus 미니멀 코스메틱 톤 */
+
+.brand-page main {
+  overflow-x: hidden;
+}
+
+/* Hero */
+.brand-hero {
+  padding: 2.5rem 1.5rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.brand-hero-kicker {
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 1rem;
+}
+
+.brand-hero-title {
+  font-size: clamp(1.35rem, 3.2vw, 2rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.35;
+  color: #222;
+  margin-bottom: 1.25rem;
+}
+
+.brand-hero-desc {
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: #666;
+  line-height: 1.85;
+  max-width: 32rem;
+}
+
+.brand-hero-visual {
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.06);
+}
+
+.brand-hero-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+/* Story split */
+.brand-story {
+  padding: 4rem 1.5rem;
+  background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+}
+
+.brand-story-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.brand-story-visual {
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.brand-story-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.brand-section-title {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #999;
+  margin-bottom: 1.5rem;
+}
+
+.brand-section-title--center {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.brand-story-text {
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: #555;
+  line-height: 1.9;
+  margin-bottom: 1.25rem;
+}
+
+.brand-story-text:last-child {
+  margin-bottom: 0;
+}
+
+/* Values */
+.brand-values {
+  padding: 4rem 1.5rem 5rem;
+}
+
+.brand-values-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.brand-values-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.brand-value-card {
+  padding: 1.75rem 1.5rem;
+  border: 1px solid #eee;
+  border-radius: 2px;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand-value-card:hover {
+  border-color: #e0e0e0;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+}
+
+.brand-value-line {
+  display: block;
+  width: 2rem;
+  height: 1px;
+  background: #111;
+  margin-bottom: 1.25rem;
+  opacity: 0.35;
+}
+
+.brand-value-title {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #222;
+  margin-bottom: 0.65rem;
+}
+
+.brand-value-desc {
+  font-size: 0.8125rem;
+  font-weight: 300;
+  color: #777;
+  line-height: 1.75;
+}
+
+/* Promise */
+.brand-promise {
+  padding: 3.5rem 1.5rem 4.5rem;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.brand-promise-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.brand-promise-heading {
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 1.75rem;
+}
+
+.brand-promise-quote {
+  margin: 0;
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  font-weight: 300;
+  font-style: normal;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.brand-promise-signed {
+  margin: 1.75rem 0 0;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* CTA */
+.brand-cta {
+  padding: 3rem 1.5rem 5rem;
+  text-align: center;
+}
+
+.brand-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 12rem;
+  padding: 0.95rem 2rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: #111;
+  border: 1px solid #111;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.brand-cta-btn:hover {
+  background: #333;
+  border-color: #333;
+}
+
+.brand-cta-btn:active {
+  transform: scale(0.99);
+}
+
+@media (max-width: 900px) {
+  .brand-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .brand-hero-visual {
+    order: -1;
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .brand-story-inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .brand-story-visual {
+    max-width: 420px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .brand-values-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+}

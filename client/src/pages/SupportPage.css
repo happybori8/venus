@@ -1,0 +1,176 @@
+/* 고객센터 — Venus 랜딩과 동일한 미니멀 톤 */
+
+.support-main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.support-header {
+  text-align: center;
+  margin-bottom: 2.75rem;
+}
+
+.support-title {
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #222;
+  margin: 0 0 1rem;
+}
+
+.support-intro {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: #666;
+  line-height: 1.85;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.support-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.support-card {
+  border: 1px solid #eee;
+  border-radius: 2px;
+  padding: 1.5rem 1.35rem;
+  background: #fafafa;
+}
+
+.support-card-title {
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #888;
+  margin: 0 0 1.1rem;
+}
+
+.support-dl {
+  margin: 0;
+}
+
+.support-dl-row {
+  margin-bottom: 1rem;
+}
+
+.support-dl-row:last-child {
+  margin-bottom: 0;
+}
+
+.support-dl dt {
+  font-size: 0.75rem;
+  color: #999;
+  font-weight: 400;
+  margin-bottom: 0.25rem;
+}
+
+.support-dl dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: #222;
+}
+
+.support-link {
+  color: #111;
+  text-decoration: none;
+  border-bottom: 1px solid #ddd;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.support-link:hover {
+  color: #555;
+  border-bottom-color: #999;
+}
+
+.support-hours-value {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: #444;
+  line-height: 1.65;
+}
+
+.support-notice {
+  border-top: 1px solid #eee;
+  padding-top: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.support-notice-title {
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #888;
+  margin: 0 0 0.85rem;
+}
+
+.support-notice-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: #555;
+  line-height: 1.75;
+}
+
+.support-notice-list li {
+  margin-bottom: 0.5rem;
+}
+
+.support-notice-list li:last-child {
+  margin-bottom: 0;
+}
+
+.support-faq-title {
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #888;
+  margin: 0 0 1.25rem;
+}
+
+.support-faq-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.support-faq-item {
+  padding: 1.15rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.support-faq-item:first-child {
+  padding-top: 0;
+}
+
+.support-faq-q {
+  margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #222;
+}
+
+.support-faq-a {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: #666;
+  line-height: 1.75;
+}
+
+@media (max-width: 640px) {
+  .support-grid {
+    grid-template-columns: 1fr;
+  }
+}

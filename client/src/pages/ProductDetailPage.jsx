@@ -9,6 +9,8 @@ import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
 import { FiStar, FiShoppingCart, FiMinus, FiPlus, FiChevronDown } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import { getCategoryLabel } from '../constants/productCategories';
+import { getProductName, getProductDescription } from '../utils/productLocale';
 import './HomePage.css';
 import './ProductDetailPage.css';
 
@@ -49,7 +51,6 @@ export default function ProductDetailPage() {
   const addItem = useCartStore((s) => s.addItem);
   const logoutStore = useAuthStore((s) => s.logout);
   const { isAuthenticated } = useAuthStore();
-
   useEffect(() => {
     setUser(getStoredUser());
   }, [location.pathname]);
@@ -139,6 +140,9 @@ export default function ProductDetailPage() {
   }
 
   const displayPrice = product.discountPrice > 0 ? product.discountPrice : product.price;
+  const displayName = getProductName(product);
+  const displayDescription = getProductDescription(product);
+  const categoryLabel = getCategoryLabel(product.category);
   const stock = product.stock;
   const isSoldOut = stock != null && stock <= 0;
   const maxSelectableQty = stock == null ? 99 : Math.max(1, stock);
@@ -154,13 +158,13 @@ export default function ProductDetailPage() {
           <span className="pd-bc-sep">/</span>
           <Link to="/products">상품</Link>
           <span className="pd-bc-sep">/</span>
-          <span className="pd-bc-current">{product.category}</span>
+          <span className="pd-bc-current">{categoryLabel}</span>
         </nav>
 
         <div className="detail-grid pd-hero-grid">
           <div className="detail-images">
             <div className="main-image pd-main-image">
-              <img src={mainSrc} alt={product.name} />
+              <img src={mainSrc} alt={displayName} />
             </div>
             {gallery.length > 1 && (
               <div className="image-thumbnails pd-thumbs">
@@ -179,9 +183,9 @@ export default function ProductDetailPage() {
             )}
           </div>
           <div className="detail-info pd-purchase">
-            <span className="detail-category">{product.category}</span>
+            <span className="detail-category">{categoryLabel}</span>
             {product.sku ? <span className="detail-sku">SKU {product.sku}</span> : null}
-            <h1 className="detail-name">{product.name}</h1>
+            <h1 className="detail-name">{displayName}</h1>
             <div className="detail-rating">
               <FiStar className="star-icon" />
               <span>{product.rating?.toFixed(1) ?? '0.0'}</span>
@@ -195,7 +199,7 @@ export default function ProductDetailPage() {
               )}
               <span className="final-price">{displayPrice.toLocaleString()}원</span>
             </div>
-            {product.description ? <p className="detail-description pd-lead">{product.description}</p> : null}
+            {displayDescription ? <p className="detail-description pd-lead">{displayDescription}</p> : null}
 
             <div className="pd-free-ship-bar" aria-hidden={untilFree <= 0}>
               {untilFree > 0 ? (
@@ -293,8 +297,8 @@ export default function ProductDetailPage() {
                 </button>
                 {open && (
                   <div className="pd-acc-panel">
-                    {acc.id === 'ingredient' && product.description ? (
-                      <p className="pd-acc-lead">{product.description}</p>
+                    {acc.id === 'ingredient' && displayDescription ? (
+                      <p className="pd-acc-lead">{displayDescription}</p>
                     ) : null}
                     <p>{acc.body}</p>
                   </div>

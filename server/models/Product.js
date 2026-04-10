@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { PRODUCT_CATEGORIES } = require('../constants/productCategories');
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -43,7 +44,8 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, '카테고리를 선택해주세요'],
-      enum: ['마스크팩', '클렌저'],
+      trim: true,
+      enum: [...PRODUCT_CATEGORIES],
     },
     images: [{ type: String }],
     stock: {

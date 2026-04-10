@@ -1,4 +1,10 @@
 const Product = require('../models/Product');
+const { PRODUCT_CATEGORIES } = require('../constants/productCategories');
+
+function normalizeCategory(value) {
+  if (value == null) return '';
+  return String(value).trim().normalize('NFC');
+}
 
 function escapeRegex(str) {
   return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -15,7 +21,7 @@ exports.getProducts = async (req, res, next) => {
       const p = String(skuPrefix).trim();
       if (p) query.sku = { $regex: new RegExp(`^${escapeRegex(p)}`, 'i') };
     }
-    if (category) query.category = category;
+    if (category) query.category = normalizeCategory(category);
     if (search) query.name = { $regex: search, $options: 'i' };
 
     const sortOptions = {
@@ -61,7 +67,15 @@ exports.getProduct = async (req, res, next) => {
 // @route   POST /api/products
 exports.createProduct = async (req, res, next) => {
   try {
-    const product = await Product.create(req.body);
+    const data = { ...req.body };
+    data.category = normalizeCategory(data.category);
+    if (data.category && !PRODUCT_CATEGORIES.includes(data.category)) {
+      return res.status(400).json({
+        success: false,
+        message: `카테고리는 다음 중 하나여야 합니다: ${PRODUCT_CATEGORIES.join(', ')}`,
+      });
+    }
+    const product = await Product.create(data);
     res.status(201).json({ success: true, product });
   } catch (error) {
     next(error);
@@ -72,7 +86,17 @@ exports.createProduct = async (req, res, next) => {
 // @route   PUT /api/products/:id
 exports.updateProduct = async (req, res, next) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    const data = { ...req.body };
+    if (Object.prototype.hasOwnProperty.call(data, 'category')) {
+      data.category = normalizeCategory(data.category);
+      if (data.category && !PRODUCT_CATEGORIES.includes(data.category)) {
+        return res.status(400).json({
+          success: false,
+          message: `카테고리는 다음 중 하나여야 합니다: ${PRODUCT_CATEGORIES.join(', ')}`,
+        });
+      }
+    }
+    const product = await Product.findByIdAndUpdate(req.params.id, data, {
       new: true,
       runValidators: true,
     });

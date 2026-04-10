@@ -1,19 +1,45 @@
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { getProductsAPI } from '../api/products';
-import ProductCard from '../components/common/ProductCard';
+import { t } from '../i18n/t';
+import useAuthStore from '../store/authStore';
+import { getStoredUser } from '../utils/authStorage';
+import LandingNavbar from '../components/landing/LandingNavbar';
+import LandingProductCard from '../components/landing/LandingProductCard';
 import { FiSearch } from 'react-icons/fi';
+import './HomePage.css';
 import './ProductsPage.css';
+import { PRODUCT_CATEGORIES, getCategoryLabel } from '../constants/productCategories';
 
-const CATEGORIES = ['전체', '마스크팩', '클렌저'];
-const SORT_OPTIONS = [
-  { value: 'newest', label: '최신순' },
-  { value: 'price-asc', label: '낮은 가격순' },
-  { value: 'price-desc', label: '높은 가격순' },
-  { value: 'rating', label: '평점순' },
-];
+const PLACEHOLDER_IMG = 'https://placehold.co/600?text=No+Image';
+
+function formatListingProduct(p) {
+  const price = p.discountPrice > 0 ? p.discountPrice : p.price;
+  const n = Number(price ?? 0);
+  return {
+    ...p,
+    id: p._id,
+    detailId: p._id,
+    img: p.images?.[0] || PLACEHOLDER_IMG,
+    priceKo: `${n.toLocaleString('ko-KR')}원`,
+  };
+}
 
 export default function ProductsPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const logoutStore = useAuthStore((s) => s.logout);
+
+  const sortOptions = useMemo(
+    () => [
+      { value: 'newest', label: t('products_sort_newest') },
+      { value: 'price-asc', label: t('products_sort_price_asc') },
+      { value: 'price-desc', label: t('products_sort_price_desc') },
+      { value: 'rating', label: t('products_sort_rating') },
+    ],
+    []
+  );
+  const [user, setUser] = useState(getStoredUser);
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,10 +53,25 @@ export default function ProductsPage() {
   const [searchInput, setSearchInput] = useState(search);
 
   useEffect(() => {
+    setUser(getStoredUser());
+  }, [location.pathname]);
+
+  const handleLogout = () => {
+    logoutStore();
+    setUser(null);
+    navigate('/');
+  };
+
+  const isLoggedIn = Boolean(localStorage.getItem('token') && user);
+  const isAdmin =
+    !!user &&
+    (user.role === 'admin' || String(user.email || '').toLowerCase() === 'admin@gmail.com');
+
+  useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const params = { page, limit: 5, sort };
+        const params = { page, limit: 12, sort };
         if (category) params.category = category;
         if (search) params.search = search;
         const { data } = await getProductsAPI(params);
@@ -66,48 +107,80 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="products-page">
+    <div className="landing products-page">
+      <LandingNavbar user={user} isLoggedIn={isLoggedIn} isAdmin={isAdmin} onLogout={handleLogout} />
       <div className="container">
-        <h1 className="page-title">전체 상품</h1>
+        <h1 className="products-page-heading">{t('products_page_title')}</h1>
         <div className="products-layout">
           <aside className="products-sidebar">
-            <div className="filter-section">
-              <h3>카테고리</h3>
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  className={`filter-btn ${(cat === '전체' ? !category : category === cat) ? 'active' : ''}`}
-                  onClick={() => updateParam('category', cat === '전체' ? '' : cat)}
-                >
-                  {cat}
-                </button>
-              ))}
+            <div className="products-filter">
+              <div className="products-filter-head">
+                <h2 className="products-filter-title">{t('products_category_title')}</h2>
+                {category ? (
+                  <button
+                    type="button"
+                    className="products-filter-reset"
+                    onClick={() => updateParam('category', '')}
+                  >
+                    {t('products_filter_reset')}
+                  </button>
+                ) : null}
+              </div>
+              <div
+                className="products-filter-chips"
+                role="group"
+                aria-label={t('products_filter_group_aria')}
+              >
+                {PRODUCT_CATEGORIES.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    className={`filter-chip ${category === cat ? 'is-active' : ''}`}
+                    onClick={() =>
+                      updateParam('category', category === cat ? '' : cat)
+                    }
+                  >
+                    {getCategoryLabel(cat)}
+                  </button>
+                ))}
+              </div>
             </div>
           </aside>
           <div className="products-main">
             <div className="products-toolbar">
               <form className="search-form" onSubmit={handleSearch}>
                 <input
-                  type="text" placeholder="상품 검색..."
-                  value={searchInput} onChange={(e) => setSearchInput(e.target.value)}
+                  type="text"
+                  placeholder={t('products_search_placeholder')}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
                 />
                 <button type="submit"><FiSearch /></button>
               </form>
               <select className="sort-select" value={sort} onChange={(e) => updateParam('sort', e.target.value)}>
-                {SORT_OPTIONS.map((o) => (
+                {sortOptions.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
                 ))}
               </select>
             </div>
-            <p className="result-count">총 {total}개의 상품</p>
+            <p className="result-count">{t('products_result_total', { total })}</p>
             {loading ? (
               <div className="loading-spinner"><div className="spinner" /></div>
             ) : products.length === 0 ? (
-              <div className="empty-state"><p>검색 결과가 없습니다.</p></div>
+              <div className="empty-state"><p>{t('products_empty')}</p></div>
             ) : (
               <>
-                <div className="grid-3">
-                  {products.map((p) => <ProductCard key={p._id} product={p} />)}
+                <div className="landing-product-grid products-page-product-grid">
+                  {products.map((p) => {
+                    const card = formatListingProduct(p);
+                    return (
+                      <LandingProductCard
+                        key={p._id}
+                        product={card}
+                        detailId={card.detailId}
+                      />
+                    );
+                  })}
                 </div>
                 {pages > 1 && (
                   <div className="pagination">
@@ -128,3 +201,4 @@ export default function ProductsPage() {
     </div>
   );
 }
+
