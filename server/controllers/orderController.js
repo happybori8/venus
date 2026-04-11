@@ -63,27 +63,6 @@ exports.getOrder = async (req, res, next) => {
   }
 };
 
-// @desc    결제 처리
-// @route   PUT /api/orders/:id/pay
-exports.payOrder = async (req, res, next) => {
-  try {
-    const order = await Order.findById(req.params.id);
-    if (!order) {
-      return res.status(404).json({ success: false, message: '주문을 찾을 수 없습니다' });
-    }
-
-    order.isPaid = true;
-    order.paidAt = Date.now();
-    order.status = '결제완료';
-    order.paymentResult = req.body;
-
-    const updatedOrder = await order.save();
-    res.json({ success: true, order: updatedOrder });
-  } catch (error) {
-    next(error);
-  }
-};
-
 // @desc    전체 주문 목록 (관리자)
 // @route   GET /api/orders
 exports.getAllOrders = async (req, res, next) => {
@@ -102,14 +81,16 @@ exports.getAllOrders = async (req, res, next) => {
 exports.updateOrderStatus = async (req, res, next) => {
   try {
     const { status } = req.body;
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      {
-        status,
-        ...(status === '배송완료' && { isDelivered: true, deliveredAt: Date.now() }),
-      },
-      { new: true }
-    );
+    const patch = { status };
+    if (status === '배송완료') {
+      patch.isDelivered = true;
+      patch.deliveredAt = Date.now();
+    }
+    if (status === '결제완료') {
+      patch.isPaid = true;
+      patch.paidAt = new Date();
+    }
+    const order = await Order.findByIdAndUpdate(req.params.id, patch, { new: true });
     if (!order) {
       return res.status(404).json({ success: false, message: '주문을 찾을 수 없습니다' });
     }

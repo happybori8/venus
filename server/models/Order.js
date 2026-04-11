@@ -32,11 +32,6 @@ const orderSchema = new mongoose.Schema(
       required: true,
       enum: ['카드', '계좌이체', '카카오페이', '네이버페이'],
     },
-    paymentResult: {
-      id: String,
-      status: String,
-      updateTime: String,
-    },
     itemsPrice: { type: Number, required: true, default: 0 },
     shippingPrice: { type: Number, required: true, default: 0 },
     totalPrice: { type: Number, required: true, default: 0 },

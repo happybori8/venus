@@ -13,3 +13,17 @@
 .order-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--gray-100); }
 .order-total { font-size: 1.05rem; font-weight: 700; color: var(--gray-900); }
 .order-detail-btn { font-size: 0.85rem; padding: 0.45rem 1rem; }
+.order-detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--gray-600, #666);
+  margin-bottom: 1rem;
+}
+.order-detail-back:hover { color: #111; }
+.order-detail-card { margin-top: 0.5rem; }
+.order-detail-meta { font-size: 0.85rem; color: var(--gray-500, #888); margin-bottom: 1rem; }
+.order-detail-section { margin-bottom: 1.25rem; }
+.order-detail-section h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem; color: #111; }
+.order-detail-section p { font-size: 0.875rem; color: var(--gray-700, #444); line-height: 1.6; }

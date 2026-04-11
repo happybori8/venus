@@ -97,7 +97,9 @@ export default function ProductDetailPage() {
   };
   const handleBuyNow = () => {
     addItem(product, qty);
-    navigate('/cart');
+    navigate('/checkout', {
+      state: { cartItemIds: [product._id] },
+    });
   };
 
   const handleReviewSubmit = async (e) => {
