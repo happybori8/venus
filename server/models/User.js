@@ -41,6 +41,19 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    birthDate: {
+      type: Date,
+      default: null,
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'other', ''],
+      default: '',
+    },
+    marketingConsent: {
+      email: { type: Boolean, default: false },
+      sms: { type: Boolean, default: false },
+    },
   },
   { timestamps: true }
 );

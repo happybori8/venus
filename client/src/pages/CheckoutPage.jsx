@@ -14,7 +14,16 @@ import toast from 'react-hot-toast';
 import './HomePage.css';
 import './CheckoutPage.css';
 
+const PORTONE_STORE_ID = 'store-27f79d89-3fe2-450b-9186-0e429bb9befc';
+const PORTONE_CHANNEL_KEY = 'channel-key-3eb55181-75ab-4e79-b6c3-2e96b5662439';
+
 const PAYMENT_METHODS = ['카드', '계좌이체', '카카오페이', '네이버페이'];
+const PAY_METHOD_MAP = {
+  '카드': 'CARD',
+  '계좌이체': 'TRANSFER',
+  '카카오페이': 'EASY_PAY',
+  '네이버페이': 'EASY_PAY',
+};
 const FREE_SHIP_THRESHOLD = 50000;
 const SHIP_MSG_OPTIONS = [
   '배송 시 요청사항을 선택해 주세요',
@@ -85,6 +94,7 @@ export default function CheckoutPage() {
   const [shippingMessage, setShippingMessage] = useState(SHIP_MSG_OPTIONS[0]);
   const [paymentMethod, setPaymentMethod] = useState('카드');
   const [loading, setLoading] = useState(false);
+  const [paymentDone, setPaymentDone] = useState(false);
 
   useEffect(() => {
     setUser(getStoredUser());
@@ -98,6 +108,7 @@ export default function CheckoutPage() {
   }, [navigate]);
 
   useEffect(() => {
+    if (paymentDone) return;
     if (rawItems.length === 0) {
       navigate('/cart', { replace: true });
       return;
@@ -106,7 +117,7 @@ export default function CheckoutPage() {
       toast.error('주문할 상품이 없습니다');
       navigate('/cart', { replace: true });
     }
-  }, [rawItems.length, items.length, navigate]);
+  }, [rawItems.length, items.length, navigate, paymentDone]);
 
   useEffect(() => {
     if (sameAsOrderer) {
@@ -209,30 +220,76 @@ export default function CheckoutPage() {
       toast.error('주소찾기로 기본 주소를 선택해 주세요');
       return;
     }
+
+    if (!window.PortOne) {
+      toast.error('결제 모듈을 불러오지 못했습니다. 페이지를 새로고침 해주세요.');
+      return;
+    }
+
     setLoading(true);
+
+    const orderItems = items.map((i) => ({
+      product: i._id,
+      name: getProductName(i),
+      quantity: i.quantity,
+      price: getSaleUnitPrice(i),
+      image: i.images?.[0] || '',
+    }));
+
+    const paymentId = `payment_${Date.now()}`;
+    const orderName =
+      items.length === 1
+        ? getProductName(items[0])
+        : `${getProductName(items[0])} 외 ${items.length - 1}건`;
+
     try {
-      const orderItems = items.map((i) => ({
-        product: i._id,
-        name: getProductName(i),
-        quantity: i.quantity,
-        price: getSaleUnitPrice(i),
-        image: i.images?.[0] || '',
-      }));
+      const response = await window.PortOne.requestPayment({
+        storeId: PORTONE_STORE_ID,
+        channelKey: PORTONE_CHANNEL_KEY,
+        paymentId,
+        orderName,
+        totalAmount: payTotal,
+        currency: 'CURRENCY_KRW',
+        payMethod: PAY_METHOD_MAP[paymentMethod] || 'CARD',
+        customer: {
+          fullName: orderer.name,
+          email: orderer.email || undefined,
+          phoneNumber: orderer.phone,
+        },
+      });
+
+      if (response.code != null) {
+        setLoading(false);
+        navigate('/order-fail', {
+          state: { message: response.message || '결제가 취소되었습니다' },
+        });
+        return;
+      }
+
       const orderedIds = items.map((i) => i._id);
       const { data } = await createOrderAPI({
         orderItems,
         shippingAddress: sa,
         paymentMethod,
+        paymentResult: {
+          paymentId: response.paymentId,
+          txId: response.txId,
+        },
       });
+
+      setPaymentDone(true);
+
       if (orderedIds.length === rawItems.length) {
         clearCart();
       } else {
         removeItemsByIds(orderedIds);
       }
-      toast.success('주문이 완료되었습니다!');
-      navigate(`/orders/${data.order._id}`);
+      navigate('/order-success', {
+        state: { orderId: data.order._id },
+      });
     } catch (err) {
-      toast.error(err.response?.data?.message || '주문에 실패했습니다');
+      const msg = err.response?.data?.message || err.message || '결제 처리 중 오류가 발생했습니다';
+      navigate('/order-fail', { state: { message: msg } });
     } finally {
       setLoading(false);
     }

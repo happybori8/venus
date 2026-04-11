@@ -101,11 +101,15 @@ exports.getMe = async (req, res, next) => {
 // @access  Private
 exports.updateMe = async (req, res, next) => {
   try {
-    const { name, phone, address, profileImage } = req.body;
+    const allowed = ['name', 'phone', 'address', 'profileImage', 'birthDate', 'gender', 'marketingConsent'];
+    const updates = {};
+    for (const key of allowed) {
+      if (req.body[key] !== undefined) updates[key] = req.body[key];
+    }
 
     const user = await User.findByIdAndUpdate(
       req.user.id,
-      { name, phone, address, profileImage },
+      updates,
       { new: true, runValidators: true }
     );
 

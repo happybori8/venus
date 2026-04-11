@@ -17,6 +17,8 @@ import SupportPage from './pages/SupportPage'
 import CheckoutPage from './pages/CheckoutPage'
 import OrdersPage from './pages/OrdersPage'
 import OrderDetailPage from './pages/OrderDetailPage'
+import OrderSuccessPage from './pages/OrderSuccessPage'
+import OrderFailPage from './pages/OrderFailPage'
 import CartBootstrap from './components/CartBootstrap'
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/order-success" element={<OrderSuccessPage />} />
+          <Route path="/order-fail" element={<OrderFailPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetailPage />} />
           <Route path="/mypage" element={<MyPage />} />

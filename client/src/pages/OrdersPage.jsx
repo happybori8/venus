@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getMyOrdersAPI } from '../api/orders';
+import LandingNavbar from '../components/landing/LandingNavbar';
+import useAuthStore from '../store/authStore';
+import { getStoredUser } from '../utils/authStorage';
 import { FiPackage } from 'react-icons/fi';
+import './HomePage.css';
 import './OrdersPage.css';
 
 const STATUS_BADGE = {
@@ -10,8 +14,15 @@ const STATUS_BADGE = {
 };
 
 export default function OrdersPage() {
+  const navigate = useNavigate();
+  const logoutStore = useAuthStore((s) => s.logout);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const user = getStoredUser();
+  const isLoggedIn = Boolean(localStorage.getItem('token') && user);
+  const isAdmin = !!user && (user.role === 'admin' || String(user.email || '').toLowerCase() === 'admin@gmail.com');
+  const handleLogout = () => { logoutStore(); navigate('/'); };
 
   useEffect(() => {
     const fetch = async () => {
@@ -30,8 +41,10 @@ export default function OrdersPage() {
   if (loading) return <div className="loading-spinner"><div className="spinner" /></div>;
 
   return (
-    <div className="orders-page">
-      <div className="container">
+    <div className="landing orders-landing">
+      <LandingNavbar user={user} isLoggedIn={isLoggedIn} isAdmin={isAdmin} onLogout={handleLogout} />
+      <div className="orders-page">
+        <div className="container">
         <h1 className="page-title">주문 내역</h1>
         {orders.length === 0 ? (
           <div className="empty-state">
@@ -68,6 +81,7 @@ export default function OrdersPage() {
             ))}
           </div>
         )}
+        </div>
       </div>
     </div>
   );

@@ -40,12 +40,21 @@ const orderSchema = new mongoose.Schema(
       enum: ['주문완료', '결제완료', '배송준비', '배송중', '배송완료', '취소'],
       default: '주문완료',
     },
+    paymentResult: {
+      paymentId: { type: String },
+      txId: { type: String },
+    },
     isPaid: { type: Boolean, default: false },
     paidAt: { type: Date },
     isDelivered: { type: Boolean, default: false },
     deliveredAt: { type: Date },
   },
   { timestamps: true }
+);
+
+orderSchema.index(
+  { 'paymentResult.paymentId': 1 },
+  { unique: true, sparse: true },
 );
 
 module.exports = mongoose.model('Order', orderSchema);
