@@ -1,8 +1,5 @@
-# Dependencies & build
+# Dependencies
 node_modules/
-dist/
-dist-ssr/
-coverage/
 
 # Env (비밀키 — 저장소에 올리지 않음)
 .env
@@ -14,21 +11,15 @@ logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-# Local overrides
-*.local
+# 업로드 디렉터리 내용만 무시 (폴더 유지)
+uploads/*
+!uploads/.gitkeep
 
 # OS & IDE
 .DS_Store
 Thumbs.db
 .idea/
-.vscode/*
-!.vscode/extensions.json
 *.swp
 *.suo
-*.ntvs*
-*.njsproj
-*.sln

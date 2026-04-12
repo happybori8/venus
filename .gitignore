@@ -1,20 +1,12 @@
-# Dependencies & build
+# Monorepo root — client/, server/ 각각 .gitignore 보유
 node_modules/
-**/node_modules/
-dist/
-**/dist/
-
-# Env (비밀키·로컬 설정 — 저장소에 올리지 않음)
 .env
 .env.*
 !.env.example
-
-# Logs & OS
-*.log
 .DS_Store
 Thumbs.db
-
-# IDE
 .idea/
-*.swp
-*.suo
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*

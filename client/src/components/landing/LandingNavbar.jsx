@@ -53,7 +53,7 @@ export default function LandingNavbar({ user, isLoggedIn, isAdmin, onLogout }) {
           <button
             type="button"
             className="landing-cart-btn"
-            onClick={() => navigate('/cart')}
+            onClick={() => navigate(isLoggedIn ? '/cart' : '/login')}
             aria-label={
               isLoggedIn && cartKindCount > 0
                 ? t('cart_aria_with_count', { count: cartKindCount })
