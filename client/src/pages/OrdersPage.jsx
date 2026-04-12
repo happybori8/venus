@@ -9,7 +9,7 @@ import './HomePage.css';
 import './OrdersPage.css';
 
 const STATUS_BADGE = {
-  '주문완료': 'badge-gray', '결제완료': 'badge-blue', '배송준비': 'badge-yellow',
+  '입금대기': 'badge-gray', '결제완료': 'badge-blue', '배송준비': 'badge-yellow',
   '배송중': 'badge-yellow', '배송완료': 'badge-green', '취소': 'badge-red',
 };
 

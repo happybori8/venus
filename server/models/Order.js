@@ -37,8 +37,8 @@ const orderSchema = new mongoose.Schema(
     totalPrice: { type: Number, required: true, default: 0 },
     status: {
       type: String,
-      enum: ['주문완료', '결제완료', '배송준비', '배송중', '배송완료', '취소'],
-      default: '주문완료',
+      enum: ['입금대기', '결제완료', '배송준비', '배송중', '배송완료', '취소'],
+      default: '입금대기',
     },
     paymentResult: {
       paymentId: { type: String },

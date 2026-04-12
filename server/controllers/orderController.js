@@ -85,7 +85,10 @@ exports.createOrder = async (req, res, next) => {
 // @route   GET /api/orders/my
 exports.getMyOrders = async (req, res, next) => {
   try {
-    const orders = await Order.find({ user: req.user._id })
+    const orders = await Order.find({
+      user: req.user._id,
+      isPaid: true,
+    })
       .populate('orderItems.product', 'name images')
       .sort({ createdAt: -1 });
     res.json({ success: true, orders });
@@ -118,7 +121,7 @@ exports.getOrder = async (req, res, next) => {
 // @route   GET /api/orders
 exports.getAllOrders = async (req, res, next) => {
   try {
-    const orders = await Order.find({})
+    const orders = await Order.find({ isPaid: true })
       .populate('user', 'name email')
       .sort({ createdAt: -1 });
     res.json({ success: true, orders });

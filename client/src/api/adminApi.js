@@ -8,6 +8,8 @@ import api from './axios';
 
 /** 관리자 — 회원 */
 export const adminGetUsers = (params) => api.get('/users', { params });
+export const adminGetUser = (id) => api.get(`/users/${id}`);
+export const adminUpdateUser = (id, data) => api.put(`/users/${id}`, data);
 export const adminDeleteUser = (id) => api.delete(`/users/${id}`);
 export const adminPatchUserRole = (id, role) => api.patch(`/users/${id}/role`, { role });
 

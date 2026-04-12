@@ -20,7 +20,6 @@ export default function CartPage() {
   const removeItem = useCartStore((s) => s.removeItem);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const removeItemsByIds = useCartStore((s) => s.removeItemsByIds);
-  const { isAuthenticated } = useAuthStore();
   const logoutStore = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
   const location = useLocation();
@@ -84,7 +83,7 @@ export default function CartPage() {
   };
 
   const requireLoginThen = (fn) => {
-    if (!isAuthenticated) {
+    if (!localStorage.getItem('token')) {
       toast.error(t('cart_toast_login'));
       navigate('/login');
       return;

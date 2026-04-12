@@ -1,24 +1,54 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getMeAPI, updateMeAPI, changePasswordAPI } from '../api/auth';
-import { getMyOrdersAPI } from '../api/orders';
+import { getMyOrdersAPI, getOrderAPI } from '../api/orders';
 import { openDaumPostcode } from '../utils/daumPostcode';
 import LandingNavbar from '../components/landing/LandingNavbar';
 import useAuthStore from '../store/authStore';
 import { getStoredUser } from '../utils/authStorage';
-import { FiUser, FiPackage, FiLock, FiChevronRight, FiEdit3, FiX } from 'react-icons/fi';
+import {
+  FiUser, FiPackage, FiLock, FiChevronRight, FiEdit3, FiX,
+  FiClock, FiCreditCard, FiBox, FiTruck, FiCheckCircle, FiXCircle, FiChevronDown,
+  FiArrowLeft,
+} from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import './HomePage.css';
 import './MyPage.css';
 
 const STATUS_BADGE = {
-  '주문완료': 'mp-badge--gray',
+  '입금대기': 'mp-badge--gray',
   '결제완료': 'mp-badge--blue',
   '배송준비': 'mp-badge--yellow',
   '배송중': 'mp-badge--yellow',
   '배송완료': 'mp-badge--green',
   '취소': 'mp-badge--red',
 };
+
+const ORDER_STATUS_TABS = [
+  { key: '전체', label: '전체보기', icon: FiPackage },
+  { key: '입금대기', label: '입금대기', icon: FiClock },
+  { key: '결제완료', label: '결제완료', icon: FiCreditCard },
+  { key: '배송준비', label: '배송준비', icon: FiBox },
+  { key: '배송중', label: '배송중', icon: FiTruck },
+  { key: '배송완료', label: '배송완료', icon: FiCheckCircle },
+  { key: '취소', label: '취소', icon: FiXCircle },
+];
+
+const PIPELINE_STEPS = [
+  { key: '입금대기', label: '입금대기', icon: FiClock },
+  { key: '결제완료', label: '결제완료', icon: FiCreditCard },
+  { key: '배송준비', label: '배송준비', icon: FiBox },
+  { key: '배송중', label: '배송중', icon: FiTruck },
+  { key: '배송완료', label: '배송완료', icon: FiCheckCircle },
+];
+
+const DATE_RANGE_OPTIONS = [
+  { value: 0, label: '전체 기간' },
+  { value: 7, label: '최근 1주일' },
+  { value: 30, label: '최근 1개월' },
+  { value: 90, label: '최근 3개월' },
+  { value: 180, label: '최근 6개월' },
+];
 
 const GENDER_OPTIONS = [
   { value: '', label: '선택 안 함' },
@@ -47,6 +77,13 @@ export default function MyPage() {
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [ordersLoaded, setOrdersLoaded] = useState(false);
 
+  const [statusFilter, setStatusFilter] = useState('전체');
+  const [dateRange, setDateRange] = useState(0);
+  const [expandedOrders, setExpandedOrders] = useState(new Set());
+
+  const [detailOrder, setDetailOrder] = useState(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+
   const [pw, setPw] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [pwSaving, setPwSaving] = useState(false);
 
@@ -60,7 +97,7 @@ export default function MyPage() {
         const { data } = await getMeAPI();
         setUser(data.user);
       } catch {
-        toast.error('회원 정보를 불러올 수 없습니다');
+        toast.error('회원정보를 불러올 수 없습니다');
         navigate('/login', { replace: true });
       } finally {
         setLoading(false);
@@ -77,6 +114,48 @@ export default function MyPage() {
         .finally(() => setOrdersLoading(false));
     }
   }, [tab, ordersLoaded]);
+
+  const statusCounts = useMemo(() => {
+    const counts = { '전체': orders.length };
+    for (const o of orders) counts[o.status] = (counts[o.status] || 0) + 1;
+    return counts;
+  }, [orders]);
+
+  const filteredOrders = useMemo(() => {
+    let list = orders;
+    if (statusFilter !== '전체') {
+      list = list.filter((o) => o.status === statusFilter);
+    }
+    if (dateRange > 0) {
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - dateRange);
+      list = list.filter((o) => new Date(o.createdAt) >= cutoff);
+    }
+    return list;
+  }, [orders, statusFilter, dateRange]);
+
+  const toggleOrderExpand = (orderId) => {
+    setExpandedOrders((prev) => {
+      const next = new Set(prev);
+      if (next.has(orderId)) next.delete(orderId);
+      else next.add(orderId);
+      return next;
+    });
+  };
+
+  const openOrderDetail = async (orderId) => {
+    setDetailLoading(true);
+    try {
+      const { data } = await getOrderAPI(orderId);
+      setDetailOrder(data.order);
+    } catch {
+      toast.error('주문 정보를 불러올 수 없습니다');
+    } finally {
+      setDetailLoading(false);
+    }
+  };
+
+  const closeOrderDetail = () => setDetailOrder(null);
 
   const handleLogout = () => {
     logoutStore();
@@ -148,7 +227,7 @@ export default function MyPage() {
       });
       setUser(data.user);
       setEditing(false);
-      toast.success('회원 정보가 수정되었습니다');
+      toast.success('회원정보가 수정되었습니다');
     } catch (err) {
       toast.error(err.response?.data?.message || '수정에 실패했습니다');
     } finally {
@@ -195,10 +274,10 @@ export default function MyPage() {
               </div>
               <nav className="mp-nav">
                 <button className={`mp-nav-btn ${tab === TAB_PROFILE ? 'mp-nav-btn--active' : ''}`} onClick={() => setTab(TAB_PROFILE)}>
-                  <FiUser /> 회원 정보
+                  <FiUser /> 회원정보
                 </button>
                 <button className={`mp-nav-btn ${tab === TAB_ORDERS ? 'mp-nav-btn--active' : ''}`} onClick={() => setTab(TAB_ORDERS)}>
-                  <FiPackage /> 주문 내역
+                  <FiPackage /> 주문목록
                 </button>
                 <button className={`mp-nav-btn ${tab === TAB_PASSWORD ? 'mp-nav-btn--active' : ''}`} onClick={() => setTab(TAB_PASSWORD)}>
                   <FiLock /> 비밀번호 변경
@@ -210,7 +289,7 @@ export default function MyPage() {
               {tab === TAB_PROFILE && !editing && (
                 <div className="mp-card">
                   <div className="mp-card-head">
-                    <h2 className="mp-card-title">회원 정보</h2>
+                    <h2 className="mp-card-title">회원정보</h2>
                     <button className="mp-btn-edit" onClick={startEdit}><FiEdit3 /> 수정</button>
                   </div>
                   <dl className="mp-info-list">
@@ -228,7 +307,7 @@ export default function MyPage() {
               {tab === TAB_PROFILE && editing && (
                 <form className="mp-card" onSubmit={handleSave}>
                   <div className="mp-card-head">
-                    <h2 className="mp-card-title">회원 정보 수정</h2>
+                    <h2 className="mp-card-title">회원정보 수정</h2>
                     <button type="button" className="mp-btn-edit" onClick={cancelEdit}><FiX /> 취소</button>
                   </div>
                   <div className="mp-form-grid">
@@ -273,54 +352,279 @@ export default function MyPage() {
                 </form>
               )}
 
-              {tab === TAB_ORDERS && (
-                <div className="mp-card">
-                  <div className="mp-card-head">
-                    <h2 className="mp-card-title">주문 내역</h2>
-                  </div>
-                  {ordersLoading ? (
-                    <div className="mp-loading-inline"><div className="spinner" /></div>
-                  ) : orders.length === 0 ? (
-                    <div className="mp-empty">
-                      <FiPackage size={48} />
-                      <p>주문 내역이 없습니다</p>
-                      <Link to="/products" className="mp-btn-primary">쇼핑하러 가기</Link>
+              {tab === TAB_ORDERS && !detailOrder && !detailLoading && (
+                <div className="mp-orders-section">
+                  {!ordersLoading && orders.length > 0 && (
+                    <div className="mp-pipeline">
+                      {PIPELINE_STEPS.map((step, idx) => {
+                        const Icon = step.icon;
+                        const count = statusCounts[step.key] || 0;
+                        return (
+                          <div key={step.key} className="mp-pipeline-step">
+                            {idx > 0 && <span className="mp-pipeline-arrow" aria-hidden>›</span>}
+                            <button
+                              type="button"
+                              className={`mp-pipeline-btn ${statusFilter === step.key ? 'mp-pipeline-btn--active' : ''}`}
+                              onClick={() => setStatusFilter(step.key === statusFilter ? '전체' : step.key)}
+                            >
+                              <Icon className="mp-pipeline-icon" />
+                              <span className="mp-pipeline-count">{count}</span>
+                              <span className="mp-pipeline-label">{step.label}</span>
+                            </button>
+                          </div>
+                        );
+                      })}
                     </div>
-                  ) : (
-                    <ul className="mp-order-list">
-                      {orders.map((order) => (
-                        <li key={order._id} className="mp-order-item">
-                          <div className="mp-order-top">
-                            <div>
-                              <span className="mp-order-date">{new Date(order.createdAt).toLocaleDateString()}</span>
-                              <span className="mp-order-id">#{order._id.slice(-8).toUpperCase()}</span>
-                            </div>
-                            <span className={`mp-badge ${STATUS_BADGE[order.status] || 'mp-badge--gray'}`}>{order.status}</span>
-                          </div>
-                          <div className="mp-order-products">
-                            {order.orderItems.slice(0, 2).map((item, i) => (
-                              <div key={i} className="mp-order-prod">
-                                <img src={item.image || 'https://placehold.co/48x48?text=No'} alt={item.name} className="mp-order-thumb" />
-                                <span className="mp-order-prod-name">{item.name}</span>
-                                <span className="mp-order-prod-qty">{item.quantity}개</span>
-                              </div>
-                            ))}
-                            {order.orderItems.length > 2 && (
-                              <p className="mp-order-more">외 {order.orderItems.length - 2}건</p>
-                            )}
-                          </div>
-                          <div className="mp-order-bottom">
-                            <strong className="mp-order-total">{order.totalPrice.toLocaleString()}원</strong>
-                            <Link to={`/orders/${order._id}`} className="mp-order-detail-link">
-                              상세 보기 <FiChevronRight />
-                            </Link>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
                   )}
+
+                  <div className="mp-card mp-card--orders">
+                    <div className="mp-orders-toolbar">
+                      <div className="mp-status-tabs">
+                        {ORDER_STATUS_TABS.map((t) => (
+                          <button
+                            key={t.key}
+                            type="button"
+                            className={`mp-status-tab ${statusFilter === t.key ? 'mp-status-tab--active' : ''}`}
+                            onClick={() => setStatusFilter(t.key)}
+                          >
+                            {t.label}
+                            <span className="mp-status-tab-count">{statusCounts[t.key] || 0}</span>
+                          </button>
+                        ))}
+                      </div>
+                      <div className="mp-date-filter">
+                        <select
+                          className="mp-date-select"
+                          value={dateRange}
+                          onChange={(e) => setDateRange(Number(e.target.value))}
+                        >
+                          {DATE_RANGE_OPTIONS.map((opt) => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    {ordersLoading ? (
+                      <div className="mp-loading-inline"><div className="spinner" /></div>
+                    ) : filteredOrders.length === 0 ? (
+                      <div className="mp-empty">
+                        <FiPackage size={48} />
+                        <p>{statusFilter === '전체' ? '주문 내역이 없습니다' : `'${statusFilter}' 상태의 주문이 없습니다`}</p>
+                        <Link to="/products" className="mp-btn-primary">쇼핑하러 가기</Link>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="mp-otbl-head">
+                          <span className="mp-otbl-col mp-otbl-col--date">주문일자 / 주문번호</span>
+                          <span className="mp-otbl-col mp-otbl-col--prod">상품정보</span>
+                          <span className="mp-otbl-col mp-otbl-col--amount">주문금액</span>
+                          <span className="mp-otbl-col mp-otbl-col--status">주문상태</span>
+                          <span className="mp-otbl-col mp-otbl-col--action" />
+                        </div>
+
+                        <ul className="mp-order-list">
+                          {filteredOrders.map((order) => {
+                            const isExpanded = expandedOrders.has(order._id);
+                            const visibleItems = isExpanded ? order.orderItems : order.orderItems.slice(0, 1);
+                            const hasMore = order.orderItems.length > 1;
+                            return (
+                              <li key={order._id} className="mp-ocard">
+                                {visibleItems.map((item, idx) => (
+                                  <div key={idx} className={`mp-ocard-row ${idx > 0 ? 'mp-ocard-row--sub' : ''}`}>
+                                    {idx === 0 ? (
+                                      <div className="mp-otbl-col mp-otbl-col--date">
+                                        <span className="mp-ocard-date">{new Date(order.createdAt).toLocaleDateString()}</span>
+                                        <span className="mp-ocard-id">#{order._id.slice(-8).toUpperCase()}</span>
+                                      </div>
+                                    ) : (
+                                      <div className="mp-otbl-col mp-otbl-col--date" />
+                                    )}
+
+                                    <Link
+                                      to={`/products/${typeof item.product === 'object' ? item.product._id : item.product}`}
+                                      className="mp-otbl-col mp-otbl-col--prod mp-ocard-prod-link"
+                                    >
+                                      <img
+                                        src={item.image || 'https://placehold.co/56x56?text=No'}
+                                        alt={item.name}
+                                        className="mp-ocard-thumb"
+                                      />
+                                      <div className="mp-ocard-prod-info">
+                                        <p className="mp-ocard-prod-name">{item.name}</p>
+                                        <p className="mp-ocard-prod-qty">수량: {item.quantity}개</p>
+                                      </div>
+                                    </Link>
+
+                                    {idx === 0 ? (
+                                      <div className="mp-otbl-col mp-otbl-col--amount">
+                                        <strong className="mp-ocard-price">{order.totalPrice.toLocaleString()}원</strong>
+                                        <span className="mp-ocard-paymethod">{order.paymentMethod}</span>
+                                      </div>
+                                    ) : (
+                                      <div className="mp-otbl-col mp-otbl-col--amount">
+                                        <span className="mp-ocard-item-price">{(item.price * item.quantity).toLocaleString()}원</span>
+                                      </div>
+                                    )}
+
+                                    {idx === 0 ? (
+                                      <div className="mp-otbl-col mp-otbl-col--status">
+                                        <span className={`mp-badge ${STATUS_BADGE[order.status] || 'mp-badge--gray'}`}>{order.status}</span>
+                                      </div>
+                                    ) : (
+                                      <div className="mp-otbl-col mp-otbl-col--status" />
+                                    )}
+
+                                    {idx === 0 ? (
+                                      <div className="mp-otbl-col mp-otbl-col--action">
+                                        <button type="button" className="mp-ocard-btn" onClick={() => openOrderDetail(order._id)}>주문상세</button>
+                                        {order.status === '배송중' && (
+                                          <button type="button" className="mp-ocard-btn mp-ocard-btn--outline">배송조회</button>
+                                        )}
+                                        {order.status === '배송완료' && (
+                                          <button type="button" className="mp-ocard-btn mp-ocard-btn--outline">구매확정</button>
+                                        )}
+                                      </div>
+                                    ) : (
+                                      <div className="mp-otbl-col mp-otbl-col--action" />
+                                    )}
+                                  </div>
+                                ))}
+
+                                {hasMore && (
+                                  <button
+                                    type="button"
+                                    className="mp-ocard-expand"
+                                    onClick={() => toggleOrderExpand(order._id)}
+                                  >
+                                    {isExpanded
+                                      ? '접기'
+                                      : `외 ${order.orderItems.length - 1}건 더 보기`}
+                                    <FiChevronDown className={`mp-ocard-expand-icon ${isExpanded ? 'mp-ocard-expand-icon--open' : ''}`} />
+                                  </button>
+                                )}
+                              </li>
+                            );
+                          })}
+                        </ul>
+
+                        <p className="mp-orders-total-info">
+                          총 <strong>{filteredOrders.length}</strong>건의 주문
+                        </p>
+                      </>
+                    )}
+                  </div>
                 </div>
               )}
+
+              {tab === TAB_ORDERS && detailLoading && (
+                <div className="mp-loading-inline"><div className="spinner" /></div>
+              )}
+
+              {tab === TAB_ORDERS && detailOrder && !detailLoading && (() => {
+                const o = detailOrder;
+                const sa = o.shippingAddress || {};
+                const currentIdx = PIPELINE_STEPS.findIndex((s) => s.key === o.status);
+                return (
+                  <div className="mp-orders-section">
+                    <button type="button" className="mp-detail-back" onClick={closeOrderDetail}>
+                      <FiArrowLeft /> 주문목록으로
+                    </button>
+
+                    <div className="mp-card">
+                      <div className="mp-detail-header">
+                        <div>
+                          <h2 className="mp-card-title">주문 상세</h2>
+                          <p className="mp-detail-meta">
+                            #{o._id.slice(-8).toUpperCase()} · {new Date(o.createdAt).toLocaleString()}
+                          </p>
+                        </div>
+                        <span className={`mp-badge ${STATUS_BADGE[o.status] || 'mp-badge--gray'}`}>{o.status}</span>
+                      </div>
+
+                      {o.status !== '취소' && (
+                        <div className="mp-detail-timeline">
+                          {PIPELINE_STEPS.map((step, idx) => {
+                            const Icon = step.icon;
+                            const done = currentIdx >= idx;
+                            return [
+                              idx > 0 && <div key={`line-${step.key}`} className={`mp-tl-line ${done ? 'mp-tl-line--done' : ''}`} />,
+                              <div key={step.key} className="mp-tl-step">
+                                <div className={`mp-tl-dot ${done ? 'mp-tl-dot--done' : ''}`}>
+                                  <Icon />
+                                </div>
+                                <span className={`mp-tl-label ${done ? 'mp-tl-label--done' : ''}`}>{step.label}</span>
+                              </div>,
+                            ];
+                          })}
+                        </div>
+                      )}
+
+                      <div className="mp-detail-section">
+                        <h3 className="mp-detail-section-title">주문 상품</h3>
+                        <div className="mp-detail-items">
+                          {o.orderItems?.map((item, i) => (
+                            <Link
+                              key={i}
+                              to={`/products/${typeof item.product === 'object' ? item.product._id : item.product}`}
+                              className="mp-detail-item"
+                            >
+                              <img
+                                src={item.image || 'https://placehold.co/56x56?text=No'}
+                                alt={item.name}
+                                className="mp-ocard-thumb"
+                              />
+                              <div className="mp-ocard-prod-info">
+                                <p className="mp-ocard-prod-name">{item.name}</p>
+                                <p className="mp-ocard-prod-qty">수량: {item.quantity}개</p>
+                              </div>
+                              <span className="mp-detail-item-price">{(item.price * item.quantity).toLocaleString()}원</span>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mp-detail-section">
+                        <h3 className="mp-detail-section-title">배송지 정보</h3>
+                        <dl className="mp-info-list mp-info-list--detail">
+                          <div className="mp-info-row"><dt>받는분</dt><dd>{sa.name || '-'}</dd></div>
+                          <div className="mp-info-row"><dt>연락처</dt><dd>{sa.phone || '-'}</dd></div>
+                          <div className="mp-info-row mp-info-row--full">
+                            <dt>주소</dt>
+                            <dd>{sa.zipCode && `(${sa.zipCode}) `}{sa.city} {sa.street}</dd>
+                          </div>
+                        </dl>
+                      </div>
+
+                      <div className="mp-detail-section">
+                        <h3 className="mp-detail-section-title">결제 정보</h3>
+                        <dl className="mp-info-list mp-info-list--detail">
+                          <div className="mp-info-row"><dt>상품금액</dt><dd>{o.itemsPrice?.toLocaleString()}원</dd></div>
+                          <div className="mp-info-row"><dt>배송비</dt><dd>{o.shippingPrice === 0 ? '무료' : `${o.shippingPrice?.toLocaleString()}원`}</dd></div>
+                          <div className="mp-info-row mp-info-row--full mp-detail-total-row">
+                            <dt>총 결제금액</dt>
+                            <dd><strong>{o.totalPrice?.toLocaleString()}원</strong></dd>
+                          </div>
+                          <div className="mp-info-row"><dt>결제수단</dt><dd>{o.paymentMethod}</dd></div>
+                          <div className="mp-info-row"><dt>결제상태</dt><dd>{o.isPaid ? '결제 완료' : '결제 대기'}</dd></div>
+                        </dl>
+                      </div>
+
+                      <div className="mp-detail-actions">
+                        <button type="button" className="mp-ocard-btn mp-ocard-btn--outline" onClick={closeOrderDetail}>
+                          주문목록
+                        </button>
+                        {o.status === '배송중' && (
+                          <button type="button" className="mp-ocard-btn">배송조회</button>
+                        )}
+                        {o.status === '배송완료' && (
+                          <button type="button" className="mp-ocard-btn">구매확정</button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {tab === TAB_PASSWORD && (
                 <form className="mp-card" onSubmit={handlePasswordChange}>

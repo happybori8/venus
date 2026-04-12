@@ -1,0 +1,378 @@
+/* ─── Layout ─── */
+.au-root {
+  display: flex;
+  position: relative;
+  min-height: 0;
+}
+.au-list-area {
+  flex: 1;
+  min-width: 0;
+  transition: margin-right 0.3s ease;
+}
+.au-list-area--shrink {
+  margin-right: 420px;
+}
+
+/* ─── 테이블 이름 버튼 ─── */
+.au-name-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: #374151;
+  padding: 0;
+  transition: color 0.15s;
+}
+.au-name-btn:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+.au-row--active > td {
+  background: #eff6ff;
+}
+
+/* ─── Role 뱃지 ─── */
+.au-role-badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: #f3f4f6;
+  color: #6b7280;
+}
+.au-role-badge--admin {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+/* ─── Overlay ─── */
+.au-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 90;
+  animation: auFadeIn 0.2s ease;
+}
+@keyframes auFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ─── Drawer ─── */
+.au-drawer {
+  position: fixed;
+  top: 0;
+  right: -440px;
+  width: 420px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.3s ease;
+  overflow: hidden;
+}
+.au-drawer--open {
+  right: 0;
+}
+.au-drawer-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+.au-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+.au-drawer-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+}
+.au-drawer-close {
+  background: none;
+  border: none;
+  font-size: 1.15rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.au-drawer-close:hover {
+  background: #f3f4f6;
+  color: #111;
+}
+
+/* ─── Profile ─── */
+.au-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1.25rem 1.25rem 0.75rem;
+}
+.au-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.au-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.au-avatar-letter {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #6b7280;
+}
+.au-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.au-profile-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ─── Body (scrollable) ─── */
+.au-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 1.25rem 1.25rem;
+}
+
+/* 통계 */
+.au-stat-row {
+  display: flex;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+.au-stat-card {
+  flex: 1;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0.85rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+.au-stat-num {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111;
+}
+.au-stat-lbl {
+  font-size: 0.7rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* 섹션 */
+.au-section {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 0.85rem;
+  margin-top: 0.85rem;
+}
+.au-section h4 {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #374151;
+  margin: 0 0 0.6rem;
+}
+.au-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+.au-section-head h4 {
+  margin-bottom: 0;
+}
+.au-edit-btn {
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #2563eb;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.au-edit-btn:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+/* 정보 리스트 */
+.au-info-list {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+  margin: 0;
+}
+.au-info-list dt {
+  color: #6b7280;
+  font-weight: 500;
+}
+.au-info-list dd {
+  color: #111;
+  margin: 0;
+  word-break: break-all;
+}
+
+/* 주소 */
+.au-addr-text {
+  font-size: 0.8125rem;
+  color: #374151;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 수정 폼 */
+.au-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.au-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.8125rem;
+}
+.au-field > span {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+.au-input {
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+}
+.au-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+.au-input--disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+.au-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.au-field-group-title {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+.au-edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+/* 주문 이력 */
+.au-order-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.au-order-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+}
+.au-order-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+.au-order-id {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #374151;
+}
+.au-order-status {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+.au-order-status--paid {
+  background: #dcfce7;
+  color: #16a34a;
+}
+.au-order-status--wait {
+  background: #fef3c7;
+  color: #d97706;
+}
+.au-order-status--cancel {
+  background: #fee2e2;
+  color: #dc2626;
+}
+.au-order-bottom {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #374151;
+}
+
+/* muted */
+.au-muted {
+  color: #9ca3af;
+  font-size: 0.8rem;
+}
+
+/* Footer */
+.au-drawer-footer {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid #e5e7eb;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ─── 반응형 ─── */
+@media (max-width: 1024px) {
+  .au-list-area--shrink {
+    margin-right: 0;
+  }
+  .au-drawer {
+    width: 100%;
+    right: -100%;
+  }
+}
