@@ -238,6 +238,13 @@
   aspect-ratio: 16 / 9;
 }
 
+/* API 응답 전에는 폴백 제품 사진을 쓰지 않고 레이아웃만 유지 */
+.landing-hero-img-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #f7f7f7;
+}
+
 /* Sections */
 .landing-section {
   padding: 4rem 1.5rem;

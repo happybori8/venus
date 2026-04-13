@@ -25,6 +25,7 @@ function truncateText(s, max) {
 
 export default function LandingHero() {
   const [heroProduct, setHeroProduct] = useState(null)
+  const [heroReady, setHeroReady] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -40,6 +41,8 @@ export default function LandingHero() {
         if (!cancelled) setHeroProduct(p ?? null)
       } catch {
         if (!cancelled) setHeroProduct(null)
+      } finally {
+        if (!cancelled) setHeroReady(true)
       }
     })()
     return () => {
@@ -70,13 +73,15 @@ export default function LandingHero() {
       })()
     : t('hero_desc')
 
-  const visual = (
+  const visual = heroReady ? (
     <img
       src={imgSrc}
       alt={heroProduct ? getProductName(heroProduct) : ''}
       className="landing-hero-img"
       loading="eager"
     />
+  ) : (
+    <div className="landing-hero-img-placeholder" aria-hidden />
   )
 
   return (
