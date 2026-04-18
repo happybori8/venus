@@ -19,6 +19,7 @@ import OrdersPage from './pages/OrdersPage'
 import OrderDetailPage from './pages/OrderDetailPage'
 import OrderSuccessPage from './pages/OrderSuccessPage'
 import OrderFailPage from './pages/OrderFailPage'
+import PaymentCallbackPage from './pages/PaymentCallbackPage'
 import CartBootstrap from './components/CartBootstrap'
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/payment/callback" element={<PaymentCallbackPage />} />
           <Route path="/order-success" element={<OrderSuccessPage />} />
           <Route path="/order-fail" element={<OrderFailPage />} />
           <Route path="/orders" element={<OrdersPage />} />

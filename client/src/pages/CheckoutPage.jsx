@@ -8,14 +8,17 @@ import { getSaleUnitPrice, getListUnitPrice, hasLineDiscount } from '../utils/ca
 import { getProductName } from '../utils/productLocale';
 import { formatCurrency } from '../utils/formatCurrency';
 import { openDaumPostcode } from '../utils/daumPostcode';
+import {
+  getPortOneChannelKey,
+  getPortOneRedirectUrl,
+  getPortOneStoreId,
+  getPortOneWindowType,
+} from '../utils/portoneConfig';
 import LandingNavbar from '../components/landing/LandingNavbar';
 import { FiChevronDown } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import './HomePage.css';
 import './CheckoutPage.css';
-
-const PORTONE_STORE_ID = 'store-27f79d89-3fe2-450b-9186-0e429bb9befc';
-const PORTONE_CHANNEL_KEY = 'channel-key-3eb55181-75ab-4e79-b6c3-2e96b5662439';
 
 const PAYMENT_METHODS = ['카드', '계좌이체', '카카오페이', '네이버페이'];
 const PAY_METHOD_MAP = {
@@ -242,23 +245,57 @@ export default function CheckoutPage() {
         ? getProductName(items[0])
         : `${getProductName(items[0])} 외 ${items.length - 1}건`;
 
+    const pendingKey = `portone_pending_${paymentId}`;
+    const pendingPayload = {
+      orderItems,
+      shippingAddress: sa,
+      paymentMethod,
+      orderedProductIds: items.map((i) => i._id),
+      rawItemsLength: rawItems.length,
+    };
+
     try {
-      const response = await window.PortOne.requestPayment({
-        storeId: PORTONE_STORE_ID,
-        channelKey: PORTONE_CHANNEL_KEY,
+      const payMethod = PAY_METHOD_MAP[paymentMethod] || 'CARD';
+      sessionStorage.setItem(pendingKey, JSON.stringify(pendingPayload));
+
+      const paymentRequest = {
+        storeId: getPortOneStoreId(),
+        channelKey: getPortOneChannelKey(),
         paymentId,
         orderName,
         totalAmount: payTotal,
         currency: 'CURRENCY_KRW',
-        payMethod: PAY_METHOD_MAP[paymentMethod] || 'CARD',
+        payMethod,
         customer: {
           fullName: orderer.name,
           email: orderer.email || undefined,
           phoneNumber: orderer.phone,
         },
-      });
+        redirectUrl: getPortOneRedirectUrl(),
+      };
+
+      const windowType = getPortOneWindowType();
+      if (windowType) {
+        paymentRequest.windowType = windowType;
+      }
+
+      if (payMethod === 'EASY_PAY') {
+        if (paymentMethod === '카카오페이') {
+          paymentRequest.easyPay = { easyPayProvider: 'KAKAOPAY' };
+        } else if (paymentMethod === '네이버페이') {
+          paymentRequest.easyPay = { easyPayProvider: 'NAVERPAY' };
+        }
+      }
+
+      const response = await window.PortOne.requestPayment(paymentRequest);
+
+      // 리다이렉트(대부분 모바일·iOS) 시 복귀는 /payment/callback 에서 처리됨.
+      if (response == null || typeof response !== 'object') {
+        return;
+      }
 
       if (response.code != null) {
+        sessionStorage.removeItem(pendingKey);
         setLoading(false);
         navigate('/order-fail', {
           state: { message: response.message || '결제가 취소되었습니다' },
@@ -277,6 +314,8 @@ export default function CheckoutPage() {
         },
       });
 
+      sessionStorage.removeItem(pendingKey);
+
       setPaymentDone(true);
 
       if (orderedIds.length === rawItems.length) {
@@ -288,6 +327,7 @@ export default function CheckoutPage() {
         state: { orderId: data.order._id },
       });
     } catch (err) {
+      sessionStorage.removeItem(pendingKey);
       const msg = err.response?.data?.message || err.message || '결제 처리 중 오류가 발생했습니다';
       navigate('/order-fail', { state: { message: msg } });
     } finally {
