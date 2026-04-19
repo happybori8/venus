@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { createOrderAPI } from '../api/orders';
 import useCartStore from '../store/cartStore';
+import { clearPortOnePendingPayload, peekPortOnePendingPayload } from '../utils/portoneConfig';
 import './HomePage.css';
 
-const STORAGE_PREFIX = 'portone_pending_';
+/** React StrictMode(dev)에서 effect 이중 실행 시 동일 paymentId 콜백이 두 번 처리되지 않도록 */
+const portoneCallbackStarted = new Set();
 
 /**
  * 포트원 모바일·iOS Safari 등 리다이렉트 결제 후 복귀 URL.
@@ -21,9 +23,8 @@ export default function PaymentCallbackPage() {
     const paymentId = searchParams.get('paymentId');
     const code = searchParams.get('code');
     const message = searchParams.get('message');
-    const txId = searchParams.get('txId');
-
-    const storageKey = paymentId ? STORAGE_PREFIX + paymentId : '';
+    const txId =
+      searchParams.get('txId') || searchParams.get('tx_id') || undefined;
 
     if (!paymentId) {
       navigate('/order-fail', {
@@ -34,7 +35,7 @@ export default function PaymentCallbackPage() {
     }
 
     if (code) {
-      if (storageKey) sessionStorage.removeItem(storageKey);
+      clearPortOnePendingPayload(paymentId);
       navigate('/order-fail', {
         replace: true,
         state: { message: message || '결제가 취소되었습니다' },
@@ -42,8 +43,12 @@ export default function PaymentCallbackPage() {
       return;
     }
 
-    const raw = sessionStorage.getItem(storageKey);
-    if (!raw) {
+    if (portoneCallbackStarted.has(paymentId)) {
+      return;
+    }
+
+    const rawPeek = peekPortOnePendingPayload(paymentId);
+    if (!rawPeek) {
       setHint('주문 정보가 없습니다. 장바구니에서 다시 결제해 주세요.');
       navigate('/order-fail', {
         replace: true,
@@ -55,7 +60,9 @@ export default function PaymentCallbackPage() {
       return;
     }
 
-    sessionStorage.removeItem(storageKey);
+    portoneCallbackStarted.add(paymentId);
+    clearPortOnePendingPayload(paymentId);
+    const raw = rawPeek;
 
     let pending;
     try {

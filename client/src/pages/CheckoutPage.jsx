@@ -9,10 +9,12 @@ import { getProductName } from '../utils/productLocale';
 import { formatCurrency } from '../utils/formatCurrency';
 import { openDaumPostcode } from '../utils/daumPostcode';
 import {
+  clearPortOnePendingPayload,
   getPortOneChannelKey,
   getPortOneRedirectUrl,
   getPortOneStoreId,
   getPortOneWindowType,
+  setPortOnePendingPayload,
 } from '../utils/portoneConfig';
 import LandingNavbar from '../components/landing/LandingNavbar';
 import { FiChevronDown } from 'react-icons/fi';
@@ -245,7 +247,6 @@ export default function CheckoutPage() {
         ? getProductName(items[0])
         : `${getProductName(items[0])} 외 ${items.length - 1}건`;
 
-    const pendingKey = `portone_pending_${paymentId}`;
     const pendingPayload = {
       orderItems,
       shippingAddress: sa,
@@ -256,7 +257,7 @@ export default function CheckoutPage() {
 
     try {
       const payMethod = PAY_METHOD_MAP[paymentMethod] || 'CARD';
-      sessionStorage.setItem(pendingKey, JSON.stringify(pendingPayload));
+      setPortOnePendingPayload(paymentId, pendingPayload);
 
       const paymentRequest = {
         storeId: getPortOneStoreId(),
@@ -272,6 +273,7 @@ export default function CheckoutPage() {
           phoneNumber: orderer.phone,
         },
         redirectUrl: getPortOneRedirectUrl(),
+        forceRedirect: true,
       };
 
       const windowType = getPortOneWindowType();
@@ -295,7 +297,7 @@ export default function CheckoutPage() {
       }
 
       if (response.code != null) {
-        sessionStorage.removeItem(pendingKey);
+        clearPortOnePendingPayload(paymentId);
         setLoading(false);
         navigate('/order-fail', {
           state: { message: response.message || '결제가 취소되었습니다' },
@@ -314,7 +316,7 @@ export default function CheckoutPage() {
         },
       });
 
-      sessionStorage.removeItem(pendingKey);
+      clearPortOnePendingPayload(paymentId);
 
       setPaymentDone(true);
 
@@ -327,7 +329,7 @@ export default function CheckoutPage() {
         state: { orderId: data.order._id },
       });
     } catch (err) {
-      sessionStorage.removeItem(pendingKey);
+      clearPortOnePendingPayload(paymentId);
       const msg = err.response?.data?.message || err.message || '결제 처리 중 오류가 발생했습니다';
       navigate('/order-fail', { state: { message: msg } });
     } finally {

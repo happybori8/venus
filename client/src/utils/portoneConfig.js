@@ -49,3 +49,32 @@ export function getPortOneWindowType() {
   if (!isLikelyMobileBrowser()) return undefined;
   return { mobile: 'REDIRECTION' };
 }
+
+const pendingPrefix = 'portone_pending_';
+
+/** PG 리다이렉트 복귀 후 주문 생성에 쓰는 임시 데이터 (iOS Safari 등에서 sessionStorage만 비는 경우 대비해 localStorage에도 저장). */
+export function setPortOnePendingPayload(paymentId, payload) {
+  const key = pendingPrefix + paymentId;
+  const blob = JSON.stringify(payload);
+  try {
+    sessionStorage.setItem(key, blob);
+  } catch {
+    /* ignore */
+  }
+  try {
+    localStorage.setItem(key, blob);
+  } catch {
+    /* quota / private mode */
+  }
+}
+
+export function peekPortOnePendingPayload(paymentId) {
+  const key = pendingPrefix + paymentId;
+  return sessionStorage.getItem(key) ?? localStorage.getItem(key);
+}
+
+export function clearPortOnePendingPayload(paymentId) {
+  const key = pendingPrefix + paymentId;
+  sessionStorage.removeItem(key);
+  localStorage.removeItem(key);
+}
