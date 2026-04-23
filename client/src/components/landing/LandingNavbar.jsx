@@ -2,6 +2,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { FiShoppingCart } from 'react-icons/fi'
 import { t } from '../../i18n/t'
 import useCartStore from '../../store/cartStore'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 
 export default function LandingNavbar({ user, isLoggedIn, isAdmin, onLogout }) {
   const navigate = useNavigate()
@@ -14,26 +16,26 @@ export default function LandingNavbar({ user, isLoggedIn, isAdmin, onLogout }) {
   const navSupportActive = path === '/support'
 
   return (
-    <header className="landing-header">
+    <header className="landing-header border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
       <div className="landing-header-inner">
         <nav className="landing-nav-left" aria-label={t('nav_primary_aria')}>
           <button
             type="button"
-            className={`landing-nav-link${navShopActive ? ' is-active' : ''}`}
+            className={`landing-nav-link rounded-md px-2 py-1 transition-colors hover:bg-muted/70${navShopActive ? ' is-active bg-muted/90' : ''}`}
             onClick={() => navigate('/products')}
           >
             {t('nav_shop')}
           </button>
           <button
             type="button"
-            className={`landing-nav-link${navBrandActive ? ' is-active' : ''}`}
+            className={`landing-nav-link rounded-md px-2 py-1 transition-colors hover:bg-muted/70${navBrandActive ? ' is-active bg-muted/90' : ''}`}
             onClick={() => navigate('/brand')}
           >
             {t('nav_brand')}
           </button>
           <button
             type="button"
-            className={`landing-nav-link${navSupportActive ? ' is-active' : ''}`}
+            className={`landing-nav-link rounded-md px-2 py-1 transition-colors hover:bg-muted/70${navSupportActive ? ' is-active bg-muted/90' : ''}`}
             onClick={() => navigate('/support')}
           >
             {t('nav_support')}
@@ -50,9 +52,11 @@ export default function LandingNavbar({ user, isLoggedIn, isAdmin, onLogout }) {
         </button>
 
         <div className="landing-nav-right">
-          <button
+          <Button
             type="button"
-            className="landing-cart-btn"
+            variant="outline"
+            size="sm"
+            className="landing-cart-btn rounded-full px-3"
             onClick={() => navigate(isLoggedIn ? '/cart' : '/login')}
             aria-label={
               isLoggedIn && cartKindCount > 0
@@ -64,12 +68,12 @@ export default function LandingNavbar({ user, isLoggedIn, isAdmin, onLogout }) {
               <FiShoppingCart className="landing-cart-icon" aria-hidden />
               <span className="landing-cart-label">{t('cart')}</span>
               {isLoggedIn && cartKindCount > 0 ? (
-                <span className="landing-cart-badge" aria-hidden>
+                <Badge className="landing-cart-badge bg-primary px-1.5 text-[10px] text-primary-foreground" aria-hidden>
                   {cartKindCount > 99 ? '99+' : cartKindCount}
-                </span>
+                </Badge>
               ) : null}
             </span>
-          </button>
+          </Button>
 
           {isLoggedIn && user?.name && (
             <span className="landing-greeting">{t('greeting', { name: user.name })}</span>
@@ -77,31 +81,33 @@ export default function LandingNavbar({ user, isLoggedIn, isAdmin, onLogout }) {
 
           {isLoggedIn ? (
             <>
-              <button type="button" className="landing-auth-btn landing-auth-logout" onClick={onLogout}>
+              <Button type="button" variant="outline" size="sm" className="landing-auth-btn landing-auth-logout rounded-full px-3" onClick={onLogout}>
                 {t('logout')}
-              </button>
+              </Button>
               <span className="landing-auth-sep" aria-hidden>
                 |
               </span>
-              <button
+              <Button
                 type="button"
-                className={`landing-auth-btn ${isAdmin ? 'landing-auth-admin' : ''}`}
+                variant={isAdmin ? 'default' : 'ghost'}
+                size="sm"
+                className={`landing-auth-btn rounded-full px-3 ${isAdmin ? 'landing-auth-admin' : ''}`}
                 onClick={() => navigate(isAdmin ? '/admin' : '/mypage')}
               >
                 {isAdmin ? t('admin') : t('mypage')}
-              </button>
+              </Button>
             </>
           ) : (
             <>
-              <button type="button" className="landing-auth-btn" onClick={() => navigate('/login')}>
+              <Button type="button" variant="ghost" size="sm" className="landing-auth-btn rounded-full px-3" onClick={() => navigate('/login')}>
                 {t('login')}
-              </button>
+              </Button>
               <span className="landing-auth-sep" aria-hidden>
                 |
               </span>
-              <button type="button" className="landing-auth-btn" onClick={() => navigate('/register')}>
+              <Button type="button" variant="default" size="sm" className="landing-auth-btn rounded-full px-3" onClick={() => navigate('/register')}>
                 {t('register')}
-              </button>
+              </Button>
             </>
           )}
         </div>

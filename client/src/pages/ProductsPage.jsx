@@ -7,6 +7,10 @@ import { getStoredUser } from '../utils/authStorage';
 import LandingNavbar from '../components/landing/LandingNavbar';
 import LandingProductCard from '../components/landing/LandingProductCard';
 import { FiSearch } from 'react-icons/fi';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import './HomePage.css';
 import './ProductsPage.css';
 import { PRODUCT_CATEGORIES, getCategoryLabel } from '../constants/productCategories';
@@ -107,23 +111,25 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="landing products-page">
+    <div className="landing products-page bg-gradient-to-b from-background to-muted/20">
       <LandingNavbar user={user} isLoggedIn={isLoggedIn} isAdmin={isAdmin} onLogout={handleLogout} />
       <div className="container">
-        <h1 className="products-page-heading">{t('products_page_title')}</h1>
+        <h1 className="products-page-heading text-balance">{t('products_page_title')}</h1>
         <div className="products-layout">
-          <aside className="products-sidebar">
+          <aside className="products-sidebar rounded-2xl border-border/70 shadow-sm">
             <div className="products-filter">
               <div className="products-filter-head">
                 <h2 className="products-filter-title">{t('products_category_title')}</h2>
                 {category ? (
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="sm"
                     className="products-filter-reset"
                     onClick={() => updateParam('category', '')}
                   >
                     {t('products_filter_reset')}
-                  </button>
+                  </Button>
                 ) : null}
               </div>
               <div
@@ -132,42 +138,52 @@ export default function ProductsPage() {
                 aria-label={t('products_filter_group_aria')}
               >
                 {PRODUCT_CATEGORIES.map((cat) => (
-                  <button
+                  <Button
                     key={cat}
                     type="button"
-                    className={`filter-chip ${category === cat ? 'is-active' : ''}`}
+                    variant={category === cat ? 'default' : 'outline'}
+                    className={`filter-chip justify-start rounded-full ${category === cat ? 'is-active' : ''}`}
                     onClick={() =>
                       updateParam('category', category === cat ? '' : cat)
                     }
                   >
                     {getCategoryLabel(cat)}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
           </aside>
           <div className="products-main">
             <div className="products-toolbar">
-              <form className="search-form" onSubmit={handleSearch}>
-                <input
+              <form className="search-form rounded-full border-border/70 bg-background/90 shadow-sm" onSubmit={handleSearch}>
+                <Input
                   type="text"
                   placeholder={t('products_search_placeholder')}
                   value={searchInput}
+                  className="border-0 bg-transparent shadow-none focus-visible:ring-0"
                   onChange={(e) => setSearchInput(e.target.value)}
                 />
-                <button type="submit"><FiSearch /></button>
+                <Button type="submit" size="sm" className="rounded-full px-4"><FiSearch /></Button>
               </form>
-              <select className="sort-select" value={sort} onChange={(e) => updateParam('sort', e.target.value)}>
+              <select className="sort-select rounded-full border-border/70 bg-background/90 shadow-sm" value={sort} onChange={(e) => updateParam('sort', e.target.value)}>
                 {sortOptions.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
                 ))}
               </select>
             </div>
-            <p className="result-count">{t('products_result_total', { total })}</p>
+            <div className="mb-4">
+              <Badge variant="secondary" className="result-count rounded-full px-3 py-1 text-xs">
+                {t('products_result_total', { total })}
+              </Badge>
+            </div>
             {loading ? (
               <div className="loading-spinner"><div className="spinner" /></div>
             ) : products.length === 0 ? (
-              <div className="empty-state"><p>{t('products_empty')}</p></div>
+              <Card className="empty-state rounded-2xl border border-dashed border-border/80 bg-card/80">
+                <CardContent className="py-10 text-center text-muted-foreground">
+                  <p>{t('products_empty')}</p>
+                </CardContent>
+              </Card>
             ) : (
               <>
                 <div className="landing-product-grid products-page-product-grid">
@@ -183,13 +199,15 @@ export default function ProductsPage() {
                   })}
                 </div>
                 {pages > 1 && (
-                  <div className="pagination">
+                  <div className="pagination mt-10">
                     {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
-                      <button
+                      <Button
                         key={p}
-                        className={`page-btn ${p === page ? 'active' : ''}`}
+                        variant={p === page ? 'default' : 'outline'}
+                        size="sm"
+                        className={`page-btn rounded-full ${p === page ? 'active' : ''}`}
                         onClick={() => handlePageChange(p)}
-                      >{p}</button>
+                      >{p}</Button>
                     ))}
                   </div>
                 )}

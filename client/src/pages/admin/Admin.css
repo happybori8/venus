@@ -1,14 +1,16 @@
 .admin-app {
   min-height: 100vh;
   display: flex;
-  background: #f3f4f6;
+  background:
+    radial-gradient(1000px 420px at 50% -180px, rgba(120, 120, 120, 0.08), transparent 70%),
+    #f5f6f8;
   color: #111827;
 }
 
 .admin-sidebar {
   width: 220px;
   flex-shrink: 0;
-  background: #111827;
+  background: #141414;
   color: #f9fafb;
   padding: 1.25rem 0;
   display: flex;
@@ -42,16 +44,17 @@
   border-radius: 8px;
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.75);
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, transform 0.12s;
 }
 
 .admin-nav a:hover {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
+  transform: translateX(1px);
 }
 
 .admin-nav a.active {
-  background: #2563eb;
+  background: #2d2d2d;
   color: #fff;
 }
 
@@ -92,9 +95,10 @@
 
 .admin-card {
   background: #fff;
-  border-radius: 12px;
+  border: 1px solid #ececec;
+  border-radius: 16px;
   padding: 1.25rem 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
   margin-bottom: 1.5rem;
 }
 
@@ -107,15 +111,16 @@
 
 .admin-stat {
   background: #fff;
-  border-radius: 12px;
+  border: 1px solid #ececec;
+  border-radius: 16px;
   padding: 1.25rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
 .admin-stat-value {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #2563eb;
+  color: #111;
 }
 
 .admin-stat-label {
@@ -145,20 +150,24 @@
 
 .admin-btn {
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: 999px;
   font-size: 0.875rem;
   font-weight: 500;
   border: none;
   cursor: pointer;
+  transition: background-color 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
 }
 
 .admin-btn-primary {
-  background: #2563eb;
+  background: #111;
   color: #fff;
 }
 
 .admin-btn-primary:hover {
-  background: #1d4ed8;
+  background: #333;
+}
+.admin-btn:not(:disabled):active {
+  transform: translateY(1px);
 }
 
 .admin-btn-danger {
@@ -193,24 +202,27 @@
   min-width: 36px;
   height: 36px;
   padding: 0 0.5rem;
-  border-radius: 8px;
+  border-radius: 999px;
   background: #fff;
   border: 1px solid #e5e7eb;
   color: #374151;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  transition: border-color 0.15s, color 0.15s, background 0.15s, transform 0.15s;
 }
 
 .admin-page-btn:hover {
-  border-color: #2563eb;
-  color: #2563eb;
+  border-color: #111;
+  color: #111;
+}
+.admin-page-btn:not(:disabled):active {
+  transform: translateY(1px);
 }
 
 .admin-page-btn.active {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #111;
+  border-color: #111;
   color: #fff;
 }
 

@@ -6,7 +6,7 @@
 
 /* Hero */
 .brand-hero {
-  padding: 2.5rem 1.5rem 4rem;
+  padding: 3rem 1.5rem 4.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -19,6 +19,11 @@
 }
 
 .brand-hero-kicker {
+  display: inline-block;
+  padding: 0.32rem 0.72rem;
+  border: 1px solid #ebebeb;
+  border-radius: 999px;
+  background: #fafafa;
   font-size: 0.6875rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -44,9 +49,10 @@
 }
 
 .brand-hero-visual {
-  border-radius: 2px;
+  border-radius: 1.1rem;
+  border: 1px solid #ececec;
   overflow: hidden;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.09);
 }
 
 .brand-hero-img {
@@ -60,7 +66,7 @@
 /* Story split */
 .brand-story {
   padding: 4rem 1.5rem;
-  background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+  background: linear-gradient(180deg, #fbfbfb 0%, #fff 100%);
 }
 
 .brand-story-inner {
@@ -73,8 +79,10 @@
 }
 
 .brand-story-visual {
-  border-radius: 2px;
+  border-radius: 1rem;
+  border: 1px solid #ececec;
   overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
 }
 
 .brand-story-img {
@@ -132,8 +140,8 @@
 
 .brand-value-card {
   padding: 1.75rem 1.5rem;
-  border: 1px solid #eee;
-  border-radius: 2px;
+  border: 1px solid #ececec;
+  border-radius: 1rem;
   background: #fff;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -170,7 +178,7 @@
 /* Promise */
 .brand-promise {
   padding: 3.5rem 1.5rem 4.5rem;
-  background: #1a1a1a;
+  background: linear-gradient(180deg, #161616 0%, #1f1f1f 100%);
   color: #fff;
 }
 
@@ -225,7 +233,7 @@
   color: #fff;
   background: #111;
   border: 1px solid #111;
-  border-radius: 2px;
+  border-radius: 999px;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }

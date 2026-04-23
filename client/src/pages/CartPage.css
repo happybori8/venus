@@ -1,8 +1,8 @@
 /* 장바구니 — 참고 레이아웃: 좌 카트 목록 / 우 요약, 미니멀 라인 */
 
 .cart-page {
-  padding: 1.75rem 0 4rem;
-  background: #fff;
+  padding: 1.85rem 0 4.4rem;
+  background: linear-gradient(180deg, #fff 0%, #fcfcfc 100%);
 }
 
 .cart-page-inner {
@@ -57,10 +57,10 @@
 }
 
 .cart-panel-title {
-  font-size: 1.125rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: #111;
-  margin: 0 0 1rem;
+  margin: 0 0 1.1rem;
   letter-spacing: -0.02em;
 }
 
@@ -104,8 +104,8 @@
 
 .cart-toolbar-line {
   height: 1px;
-  background: #e5e5e5;
-  margin-bottom: 0.5rem;
+  background: #e8e8e8;
+  margin-bottom: 0.65rem;
 }
 
 .cart-item-list {
@@ -118,13 +118,17 @@
   display: grid;
   grid-template-columns: auto 88px minmax(0, 1fr);
   gap: 0.85rem 1rem;
-  padding: 1.15rem 0;
-  border-bottom: 1px solid #eee;
+  padding: 1.15rem 0.8rem;
+  border: 1px solid #ececec;
+  border-radius: 1rem;
+  margin-bottom: 0.8rem;
+  background: #fff;
   align-items: start;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
 }
 
 .cart-item-row:last-child {
-  border-bottom: none;
+  border-bottom: 1px solid #ececec;
 }
 
 .cart-item-check {
@@ -144,7 +148,8 @@
   display: block;
   width: 88px;
   height: 88px;
-  border: 1px solid #eee;
+  border: 1px solid #e8e8e8;
+  border-radius: 0.8rem;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -189,7 +194,7 @@
 .cart-item-name {
   display: block;
   font-size: 0.9375rem;
-  font-weight: 400;
+  font-weight: 600;
   color: #111;
   line-height: 1.45;
   padding-right: 1.5rem;
@@ -228,8 +233,8 @@
 .cart-qty-group {
   display: inline-flex;
   align-items: center;
-  border: 1px solid #e0e0e0;
-  border-radius: 2px;
+  border: 1px solid #e4e4e4;
+  border-radius: 999px;
   overflow: hidden;
   background: #fafafa;
 }
@@ -238,8 +243,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: 2.1rem;
+  height: 2.1rem;
   border: none;
   background: #fff;
   color: #555;
@@ -277,9 +282,10 @@
 
 .cart-summary-box {
   border: 1px solid #e8e8e8;
-  border-radius: 2px;
+  border-radius: 1rem;
   padding: 1.35rem 1.25rem 1.5rem;
   background: #fff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
 }
 
 .cart-summary-rows {
@@ -344,7 +350,7 @@
 .cart-summary-pay-num {
   font-size: 1.35rem;
   font-weight: 700;
-  color: #2563eb;
+  color: #111;
   letter-spacing: -0.02em;
 }
 
@@ -355,7 +361,7 @@
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  border-radius: 2px;
+  border-radius: 999px;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
@@ -364,7 +370,7 @@
   margin-bottom: 0.5rem;
   background: #fff;
   color: #111;
-  border: 1px solid #111;
+  border: 1.5px solid #111;
 }
 
 .cart-btn--outline:hover {
@@ -374,7 +380,7 @@
 .cart-btn--solid {
   background: #111;
   color: #fff;
-  border: 1px solid #111;
+  border: 1.5px solid #111;
 }
 
 .cart-btn--solid:hover {

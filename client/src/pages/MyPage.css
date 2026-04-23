@@ -1,4 +1,9 @@
-.mp-landing { background: #f8f9fa; min-height: 100vh; }
+.mp-landing {
+  background:
+    radial-gradient(980px 440px at 50% -160px, rgba(120, 120, 120, 0.09), transparent 70%),
+    #f8f9fa;
+  min-height: 100vh;
+}
 .mp-main { padding: 2rem 1.5rem 4rem; }
 .mp-container { max-width: 1060px; margin: 0 auto; }
 .mp-container--narrow { max-width: 740px; }
@@ -32,7 +37,7 @@
 /* --- Content Card --- */
 .mp-card {
   background: #fff; border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  box-shadow: 0 12px 30px rgba(0,0,0,.07);
   padding: 1.75rem 2rem;
 }
 .mp-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
@@ -40,7 +45,7 @@
 
 .mp-btn-edit {
   display: inline-flex; align-items: center; gap: 0.35rem;
-  background: none; border: 1px solid #ddd; border-radius: 8px;
+  background: none; border: 1px solid #ddd; border-radius: 999px;
   padding: 0.4rem 0.85rem; font-size: 0.85rem; color: #555; cursor: pointer;
   transition: border-color .15s, color .15s;
 }
@@ -60,7 +65,7 @@
 .mp-label--full { grid-column: 1 / -1; }
 .mp-req { color: #ef4444; }
 .mp-input {
-  padding: 0.65rem 0.8rem; border: 1px solid #ddd; border-radius: 8px;
+  padding: 0.65rem 0.8rem; border: 1px solid #ddd; border-radius: 12px;
   font-size: 0.9rem; color: #333; outline: none; transition: border-color .15s;
 }
 .mp-input:focus { border-color: #111; }
@@ -68,7 +73,7 @@
 
 .mp-addr-row { display: flex; gap: 0.5rem; }
 .mp-btn-ghost {
-  padding: 0.65rem 1rem; background: #f5f5f5; border: 1px solid #ddd; border-radius: 8px;
+  padding: 0.65rem 1rem; background: #f5f5f5; border: 1px solid #ddd; border-radius: 999px;
   font-size: 0.85rem; color: #333; cursor: pointer; white-space: nowrap;
 }
 .mp-btn-ghost:hover { background: #eee; }
@@ -79,7 +84,7 @@
 
 .mp-btn-primary {
   display: inline-block; padding: 0.8rem 2rem; background: #111; color: #fff;
-  border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 600;
+  border: none; border-radius: 999px; font-size: 0.95rem; font-weight: 600;
   cursor: pointer; transition: opacity .15s;
 }
 .mp-btn-primary:hover { opacity: .85; }
@@ -104,7 +109,7 @@
 .mp-pipeline {
   display: flex; align-items: center; justify-content: center; gap: 0;
   background: #fff; border-radius: 14px; padding: 1.25rem 1.5rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  box-shadow: 0 10px 24px rgba(0,0,0,.06);
 }
 .mp-pipeline-step { display: flex; align-items: center; }
 .mp-pipeline-arrow {
@@ -113,12 +118,12 @@
 }
 .mp-pipeline-btn {
   display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
-  background: none; border: 2px solid transparent; border-radius: 12px;
+  background: none; border: 1px solid transparent; border-radius: 16px;
   padding: 0.85rem 1.4rem; cursor: pointer; transition: all .15s;
   min-width: 84px;
 }
 .mp-pipeline-btn:hover { background: #f8f9fa; }
-.mp-pipeline-btn--active { border-color: #111; background: #f8f9fa; }
+.mp-pipeline-btn--active { border-color: #111; background: #f8f9fa; box-shadow: 0 4px 12px rgba(0,0,0,.07); }
 .mp-pipeline-icon { font-size: 1.3rem; color: #888; }
 .mp-pipeline-btn--active .mp-pipeline-icon { color: #111; }
 .mp-pipeline-count {
@@ -178,7 +183,7 @@
 
 /* --- Order Card --- */
 .mp-order-list { list-style: none; padding: 0; margin: 0; }
-.mp-ocard { border-bottom: 1px solid #f0f0f0; }
+.mp-ocard { border-bottom: 1px solid #f0f0f0; background: #fff; }
 .mp-ocard:last-child { border-bottom: none; }
 
 .mp-ocard-row {
@@ -235,7 +240,7 @@
 }
 .mp-ocard-btn {
   display: inline-flex; align-items: center; justify-content: center;
-  padding: 0.4rem 0.65rem; border-radius: 6px;
+  padding: 0.42rem 0.8rem; border-radius: 999px;
   font-size: 0.78rem; font-weight: 600; cursor: pointer;
   text-decoration: none; text-align: center; transition: all .15s;
   background: #111; color: #fff; border: 1px solid #111;
@@ -324,7 +329,7 @@
 .mp-detail-item {
   display: flex; align-items: center; gap: 0.75rem;
   padding: 0.75rem 0.5rem; border-bottom: 1px solid #f8f8f8;
-  text-decoration: none; border-radius: 8px;
+  text-decoration: none; border-radius: 12px;
   transition: background .15s;
 }
 .mp-detail-item:last-child { border-bottom: none; }

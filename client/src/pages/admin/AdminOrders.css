@@ -10,7 +10,7 @@
   min-width: 120px;
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1rem 0.75rem;
   text-align: center;
   cursor: pointer;
@@ -21,12 +21,12 @@
   gap: 0.35rem;
 }
 .ao-pipe-item:hover {
-  border-color: #93c5fd;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+  border-color: #bbb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
 }
 .ao-pipe-item--active {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+  border-color: #111;
+  box-shadow: 0 0 0 2px rgba(17, 17, 17, 0.12);
 }
 .ao-pipe-count {
   font-size: 1.75rem;
@@ -69,13 +69,13 @@
   color: #2563eb;
 }
 .ao-tab--active {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #111;
+  border-color: #111;
   color: #fff;
 }
 .ao-tab--active:hover {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
+  background: #333;
+  border-color: #333;
   color: #fff;
 }
 .ao-tab-count {
@@ -107,8 +107,8 @@
 }
 .ao-search:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: #111;
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
 }
 
 /* ─── 테이블 ─── */
@@ -138,7 +138,7 @@
   gap: 0.3rem;
   padding: 0;
 }
-.ao-id-btn:hover { color: #2563eb; }
+.ao-id-btn:hover { color: #111; }
 .ao-id-toggle {
   font-size: 0.6rem;
   opacity: 0.5;
@@ -170,10 +170,10 @@
   transition: color 0.15s;
 }
 .ao-prod-link:hover {
-  color: #2563eb;
+  color: #111;
 }
 .ao-prod-link:hover .ao-prod-thumb {
-  box-shadow: 0 0 0 2px #2563eb;
+  box-shadow: 0 0 0 2px #111;
 }
 .ao-prod-name {
   white-space: nowrap;
@@ -226,8 +226,8 @@
 }
 .ao-status-select:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: #111;
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
 }
 
 .ao-td-date {
@@ -238,7 +238,7 @@
 
 /* row 확장됐을 때 */
 .ao-row--expanded > td {
-  background: #f0f7ff;
+  background: #f6f6f6;
 }
 
 /* ─── 확장 패널 (주문 상세) ─── */
@@ -323,7 +323,7 @@
   height: 2px;
   background: #e5e7eb;
 }
-.ao-mini-tl-line--done { background: #2563eb; }
+.ao-mini-tl-line--done { background: #111; }
 .ao-mini-tl-dot {
   width: 12px;
   height: 12px;
@@ -331,7 +331,7 @@
   background: #e5e7eb;
   flex-shrink: 0;
 }
-.ao-mini-tl-dot--done { background: #2563eb; }
+.ao-mini-tl-dot--done { background: #111; }
 .ao-mini-tl-label {
   position: absolute;
   top: 18px;
